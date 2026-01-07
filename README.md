@@ -1,18 +1,28 @@
-# Ayanda Mabaso
+# Ayanda Mabaso - Fashion & Style Consultancy
 
-A modern web project built with Vite, Vanilla JavaScript, and Tailwind CSS.
+A modern SvelteKit 5 application for fashion e-commerce and personal styling consultations, built with shadcn-svelte and Tailwind CSS v4.
 
 ## Technologies
 
-- **Vite** - Fast build tool and dev server
-- **Vanilla JavaScript** - No framework, pure JS
-- **Tailwind CSS v4** - Utility-first CSS framework
+- **SvelteKit 5** - Fast, modern web framework with SSR/SSG support
+- **Svelte 5** - Reactive UI framework with runes
+- **TypeScript** - Type-safe development
+- **Tailwind CSS v4** - Utility-first CSS framework (using @import syntax)
+- **shadcn-svelte** - Re-usable component library
+- **@tredicik/portal-sdk** - Multi-tenant portal integration
+
+## Features
+
+- **Landing Page** - Modern hero section with features showcase
+- **Store** - E-commerce product catalog with filtering
+- **Booking** - Consultation scheduling system
+- **Dashboard** - Customer portal for orders and appointments
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js (v14 or higher)
+- Node.js (v18 or higher)
 - npm or pnpm
 
 ### Installation
@@ -24,7 +34,7 @@ npm install
 # Start development server
 npm run dev
 
-# Build for production
+# Build for production (static site)
 npm run build
 
 # Preview production build
@@ -35,19 +45,65 @@ npm run preview
 
 ```
 ayandamabaso/
-├── public/          # Static assets
 ├── src/
-│   ├── main.js      # Application entry point
-│   ├── style.css    # Tailwind CSS imports
-│   ├── counter.js   # Counter component
-│   └── javascript.svg
-├── index.html       # HTML entry point
+│   ├── routes/              # SvelteKit routes
+│   │   ├── +page.svelte     # Landing page
+│   │   ├── store/           # E-commerce store
+│   │   ├── booking/         # Consultation booking
+│   │   └── dashboard/       # Customer portal
+│   ├── lib/
+│   │   ├── config.ts        # Tenant configuration
+│   │   ├── components/      # shadcn-svelte components
+│   │   └── utils.ts         # Utility functions
+│   ├── app.html             # HTML template
+│   └── app.css              # Global styles (Tailwind v4)
+├── static/                  # Static assets
+├── svelte.config.js         # SvelteKit config (static adapter)
 └── package.json
 ```
+
+## Tenant Configuration
+
+Multi-tenant support is configured in `src/lib/config.ts`:
+
+```typescript
+export const tenantConfig = {
+  tenantId: 41,
+  name: 'Ayanda Mabaso',
+  domain: 'ayandamabaso.co.za',
+  theme: {
+    primary: '#1a1a2e',
+    secondary: '#16213e',
+    accent: '#e94560'
+  },
+  features: {
+    store: true,
+    booking: true,
+    blog: false
+  }
+};
+```
+
+## Deployment
+
+This project uses `@sveltejs/adapter-static` for static site generation, suitable for:
+- AWS S3 + CloudFront
+- Netlify
+- Vercel
+- GitHub Pages
+
+Build output is in the `build/` directory after running `npm run build`.
 
 ## Development
 
 The development server will start at `http://localhost:5173` by default.
+
+## Integration
+
+To integrate with Tredicik backend:
+1. Update `VITE_API_URL` in `.env`
+2. Use `@tredicik/portal-sdk` for authenticated API calls
+3. Configure tenant ID in `src/lib/config.ts`
 
 ## License
 
