@@ -19,55 +19,56 @@
 
 	const packages = [
 		{
-			name: 'Discovery Call',
-			description: 'Perfect for getting started and understanding your needs',
-			price: 'Free',
-			duration: '30 min',
+			name: '1 Hour Consultation',
+			description: 'Focused one-on-one consultation session',
+			price: 'R2,500',
+			duration: '60 min',
 			icon: Clock,
 			features: [
-				'Initial business assessment',
-				'Goal identification',
-				'Strategy overview',
-				'Q&A session'
+				'One-on-one session',
+				'Strategic guidance',
+				'Actionable insights',
+				'Post-session summary'
 			],
-			cta: 'Book Free Call',
+			cta: 'Book Now',
 			popular: false,
-			href: '/booking?package=discovery'
+			href: '/booking?package=standard'
 		},
 		{
-			name: 'Strategy Session',
-			description: 'Deep-dive consultation for serious business growth',
-			price: 'R2,500',
-			duration: '90 min',
+			name: '2 Hours Deep Dive',
+			description: 'In-depth consultation for comprehensive strategies',
+			price: 'R4,000',
+			duration: '120 min',
 			icon: Video,
 			features: [
+				'Extended one-on-one session',
+				'Deep strategy development',
 				'Comprehensive business audit',
-				'Custom marketing roadmap',
-				'Content strategy blueprint',
-				'Implementation guide',
-				'30-day email support'
+				'Detailed action plan',
+				'Follow-up email support'
 			],
-			cta: 'Book Session',
+			cta: 'Book Now',
 			popular: true,
 			href: '/booking?package=strategy'
 		},
 		{
-			name: 'VIP Intensive',
-			description: 'Full-day intensive for transformational results',
+			name: 'Live Group Session Teaching',
+			description: 'Interactive training for corporate teams',
 			price: 'R15,000',
-			duration: 'Full Day',
-			icon: Zap,
+			duration: '2 hours',
+			icon: Users,
 			features: [
-				'Complete business transformation',
-				'Brand & marketing overhaul',
-				'Content calendar creation',
-				'Team training session',
-				'90-day support & follow-ups',
-				'Priority access to resources'
+				'2-hour interactive training',
+				'5-10 participants',
+				'Perfect for corporate teams',
+				'Social media strategy',
+				'Marketing best practices',
+				'Q&A session',
+				'Course materials included'
 			],
-			cta: 'Apply Now',
+			cta: 'Book Now',
 			popular: false,
-			href: '/booking?package=vip'
+			href: '/booking?package=group'
 		}
 	];
 
@@ -131,8 +132,8 @@
 
 				<!-- Subheading -->
 				<p class="text-xl text-muted-foreground max-w-xl leading-relaxed">
-					Digital creator with 200K+ followers. Marketing expert & speaker helping businesses
-					generate millions in sales through strategic content and marketing.
+					Marketing expert & speaker who's helped generate R10M+ in revenue for clients
+					through strategic content and marketing solutions.
 				</p>
 
 				<!-- CTAs -->
@@ -324,9 +325,9 @@
 			<div class="relative">
 				<div class="aspect-square max-w-md mx-auto rounded-3xl bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center">
 					<div class="text-center text-white space-y-4 p-8">
-						<Award class="w-16 h-16 mx-auto opacity-80" />
-						<p class="text-2xl font-semibold">200K+ Followers</p>
-						<p class="text-white/70">Millions in sales generated for clients</p>
+						<TrendingUp class="w-16 h-16 mx-auto opacity-80" />
+						<p class="text-2xl font-semibold">R10M+ Revenue Generated</p>
+						<p class="text-white/70">For clients across South Africa</p>
 					</div>
 				</div>
 			</div>

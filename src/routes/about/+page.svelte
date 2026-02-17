@@ -61,10 +61,10 @@
 	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 		<div class="grid grid-cols-2 lg:grid-cols-4 gap-8">
 			{#each [
-				{ value: '200K+', label: 'Followers', icon: Users },
-				{ value: '50+', label: 'Clients Served', icon: Target },
 				{ value: 'R10M+', label: 'Revenue Generated', icon: TrendingUp },
-				{ value: '5+', label: 'Years Experience', icon: Award }
+				{ value: '50+', label: 'Clients Served', icon: Target },
+				{ value: '5+', label: 'Years Experience', icon: Award },
+				{ value: '200K+', label: 'Community', icon: Users }
 			] as stat (stat.label)}
 				{@const StatIcon = stat.icon}
 				<div class="text-center p-6 rounded-2xl bg-muted/30">
