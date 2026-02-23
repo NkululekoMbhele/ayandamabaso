@@ -35,50 +35,63 @@ class BookingStore {
 	/**
 	 * Load consultation offerings from the backend
 	 * Filters for SERVICE type offerings with consultation metadata
+	 * Falls back to hardcoded packages if API is unavailable
 	 */
 	async loadConsultationOfferings(): Promise<void> {
 		this.isLoading = true;
 		this.error = null;
 
 		try {
-			// Fetch products/offerings from Portal SDK
-			const response = await portal.products.getProducts({
-				inStock: true,
-				sortBy: 'createdAt',
-				sortOrder: 'asc'
-			});
+			// Fetch products/offerings directly from the store endpoint
+			const apiUrl = import.meta.env.VITE_API_URL;
+			const apiKey = import.meta.env.VITE_API_KEY;
+			const tenantId = import.meta.env.VITE_TENANT_ID;
+
+			const response = await fetch(
+				`${apiUrl.replace('/external/v1', '/v1/store')}/products?tenant_id=${tenantId}`,
+				{
+					headers: {
+						'X-API-Key': apiKey,
+						'Content-Type': 'application/json'
+					},
+					signal: AbortSignal.timeout(5000) // 5 second timeout
+				}
+			);
+
+			if (!response.ok) {
+				throw new Error(`API request failed with status ${response.status}`);
+			}
+
+			const data = await response.json();
+			const products = data.items || [];
+
+			if (products.length === 0) {
+				throw new Error('No products returned from API');
+			}
 
 			// Filter and map to consultation offerings
 			// Look for offerings with metadata indicating they're consultations
-			this.offerings = response.products
-				.filter((product) => {
-					// Check if product has consultation/booking metadata
-					// Use type assertion since SDK Product type may not include all dynamic properties
-					const productAny = product as any;
-					const metadata = productAny.metadata || productAny.attributes || {};
+			this.offerings = products
+				.filter((product: any) => {
 					return (
-						(metadata.package_type === 'standard' ||
-							metadata.package_type === 'strategy' ||
-							metadata.package_type === 'group' ||
-							product.name?.toLowerCase().includes('consultation') ||
+						product.offering_type === 'service' &&
+						(product.name?.toLowerCase().includes('consultation') ||
 							product.name?.toLowerCase().includes('session'))
 					);
 				})
-				.map((product) => {
-					// Use type assertion for dynamic metadata properties
-					const productAny = product as any;
-					const metadata = productAny.metadata || {};
+				.map((product: any) => {
+					const metadata = product.metadata || product.custom_metadata || {};
 					return {
 						id: product.id,
 						name: product.name,
-						description: product.description || product.shortDescription || '',
+						description: product.description || '',
 						package_type: metadata.package_type || 'discovery',
 						duration_minutes: metadata.duration_minutes || 30,
-						price: product.salePrice || product.price,
-						sale_price: product.salePrice,
-						image_url: product.thumbnail || productAny.image_url,
+						price: product.base_price || product.price,
+						sale_price: product.sale_price,
+						image_url: product.image_url,
 						metadata: {
-							includes: metadata.includes || [],
+							includes: metadata.features || metadata.includes || [],
 							buffer_minutes: metadata.buffer_minutes || tenantConfig.consultations?.defaultBufferMinutes || 15,
 							advance_booking_days:
 								metadata.advance_booking_days || tenantConfig.consultations?.advanceBookingDays || 1,
@@ -89,10 +102,83 @@ class BookingStore {
 					};
 				});
 
-			console.log(`Loaded ${this.offerings.length} consultation offerings`);
+			console.log(`Loaded ${this.offerings.length} consultation offerings from API`);
 		} catch (err: any) {
-			this.error = err.message || 'Failed to load consultations';
-			console.error('Error loading consultations:', err);
+			// Fallback to hardcoded packages if API fails
+			console.warn('API unavailable, using hardcoded packages:', err.message);
+			this.offerings = [
+				{
+					id: 1,
+					name: '1 Hour Consultation',
+					description: 'Focused one-on-one consultation session',
+					package_type: 'standard',
+					duration_minutes: 60,
+					price: 2500,
+					sale_price: null,
+					image_url: null,
+					metadata: {
+						includes: [
+							'One-on-one session',
+							'Strategic guidance',
+							'Actionable insights',
+							'Post-session summary'
+						],
+						buffer_minutes: 15,
+						advance_booking_days: 1,
+						max_booking_days: 90,
+						popular: false
+					}
+				},
+				{
+					id: 2,
+					name: '2 Hours Deep Dive',
+					description: 'In-depth consultation for comprehensive strategies',
+					package_type: 'strategy',
+					duration_minutes: 120,
+					price: 4000,
+					sale_price: null,
+					image_url: null,
+					metadata: {
+						includes: [
+							'Extended one-on-one session',
+							'Deep strategy development',
+							'Comprehensive business audit',
+							'Detailed action plan',
+							'Follow-up email support'
+						],
+						buffer_minutes: 15,
+						advance_booking_days: 1,
+						max_booking_days: 90,
+						popular: true
+					}
+				},
+				{
+					id: 3,
+					name: 'Live Group Session Teaching',
+					description: 'Interactive training for corporate teams',
+					package_type: 'group',
+					duration_minutes: 120,
+					price: 15000,
+					sale_price: null,
+					image_url: null,
+					metadata: {
+						includes: [
+							'2-hour interactive training',
+							'5-10 participants',
+							'Perfect for corporate teams',
+							'Social media strategy',
+							'Marketing best practices',
+							'Q&A session',
+							'Course materials included'
+						],
+						buffer_minutes: 30,
+						advance_booking_days: 1,
+						max_booking_days: 90,
+						popular: false
+					}
+				}
+			];
+			console.log(`Loaded ${this.offerings.length} consultation offerings from hardcoded fallback`);
 		} finally {
 			this.isLoading = false;
 		}
