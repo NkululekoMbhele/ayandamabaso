@@ -43,9 +43,10 @@ class BookingStore {
 
 		try {
 			// Fetch products/offerings directly from the store endpoint
-			const apiUrl = import.meta.env.VITE_API_URL;
-			const apiKey = import.meta.env.VITE_API_KEY;
-			const tenantId = import.meta.env.VITE_TENANT_ID;
+			// Use api.tredicik.com for proper HTTPS support
+			const apiUrl = 'https://api.tredicik.com/api/v1';
+			const apiKey = import.meta.env.VITE_API_KEY || 'pk_live_tenant_41';
+			const tenantId = import.meta.env.VITE_TENANT_ID || '41';
 
 			const response = await fetch(
 				`${apiUrl.replace('/external/v1', '/v1/store')}/products?tenant_id=${tenantId}`,
