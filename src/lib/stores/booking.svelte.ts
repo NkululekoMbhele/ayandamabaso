@@ -304,8 +304,8 @@ class BookingStore {
 			return { success: false, error: 'Please select a consultation package' };
 		}
 
-		if (!this.selectedDate || !this.selectedTime) {
-			return { success: false, error: 'Please select a date and time' };
+		if (!this.selectedDate) {
+			return { success: false, error: 'Please select a date for your consultation' };
 		}
 
 		// Check if authenticated user or guest info provided
@@ -364,12 +364,12 @@ class BookingStore {
 
 	/**
 	 * Check if booking form is complete and valid
+	 * Note: Date-only booking - time will be confirmed via email
 	 */
 	get isComplete(): boolean {
 		return !!(
 			this.selectedOffering &&
 			this.selectedDate &&
-			this.selectedTime &&
 			(authStore.isAuthenticated || this.guestInfo)
 		);
 	}

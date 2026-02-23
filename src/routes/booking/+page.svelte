@@ -95,7 +95,8 @@
 	function goToNextStep() {
 		if (currentStep === 1 && bookingStore.selectedOffering) {
 			currentStep = 2;
-		} else if (currentStep === 2 && bookingStore.selectedDate && bookingStore.selectedTime) {
+		} else if (currentStep === 2 && bookingStore.selectedDate) {
+			// Date-only booking flow: time will be confirmed via email
 			currentStep = 3;
 		}
 	}
