@@ -1,6 +1,9 @@
 // Check if we're in browser
 const isBrowser = typeof window !== 'undefined';
 
+// API URL - use api.tredicik.com for HTTPS compatibility
+const API_URL = 'https://api.tredicik.com/api/v1';
+
 // Storage keys
 const CART_KEY = 'ayanda_cart';
 const SESSION_KEY = 'ayanda_cart_session';
@@ -155,7 +158,9 @@ async function loadCart() {
     isLoading = true;
     error = null;
 
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/cart`, {
+    // Use api.tredicik.com for HTTPS compatibility (avoid mixed-content errors)
+    const apiUrl = 'https://api.tredicik.com/api/v1';
+    const response = await fetch(`${apiUrl}/cart`, {
       headers: getApiHeaders()
     });
 
@@ -235,7 +240,7 @@ export const cartStore = {
         extra_data: item.extraData
       };
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/cart/items`, {
+      const response = await fetch(`${API_URL}/cart/items`, {
         method: 'POST',
         headers: getApiHeaders(true),
         body: JSON.stringify(payload)
@@ -263,7 +268,7 @@ export const cartStore = {
     isLoading = true;
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/cart/items/${itemId}`, {
+      const response = await fetch(`${API_URL}/cart/items/${itemId}`, {
         method: 'PATCH',
         headers: getApiHeaders(true),
         body: JSON.stringify({ quantity })
@@ -291,7 +296,7 @@ export const cartStore = {
     isLoading = true;
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/cart/items/${itemId}`, {
+      const response = await fetch(`${API_URL}/cart/items/${itemId}`, {
         method: 'DELETE',
         headers: getApiHeaders()
       });
@@ -318,7 +323,7 @@ export const cartStore = {
     isLoading = true;
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/cart`, {
+      const response = await fetch(`${API_URL}/cart`, {
         method: 'DELETE',
         headers: getApiHeaders()
       });
@@ -345,7 +350,7 @@ export const cartStore = {
     isLoading = true;
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/cart/promo`, {
+      const response = await fetch(`${API_URL}/cart/promo`, {
         method: 'POST',
         headers: getApiHeaders(true),
         body: JSON.stringify({ promo_code: code })
