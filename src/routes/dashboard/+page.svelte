@@ -4,7 +4,7 @@
   import { authStore } from '$lib/stores/auth.svelte';
   import { portal } from '$lib/portal';
   import type { Order } from '@tredicik/portal-sdk';
-  import { Card } from '$lib/components/ui/card';
+  import * as Card from '$lib/components/ui/card';
   import { Button } from '$lib/components/ui/button';
   import { Badge } from '$lib/components/ui/badge';
   import { User, Package, Calendar, ShoppingBag, Loader2, Download } from 'lucide-svelte';
@@ -28,10 +28,11 @@
     try {
       const ordersResponse = await portal.orders.getOrders({ page: 1, perPage: 5 });
 
-      if (ordersResponse.success && ordersResponse.data) {
-        orders = ordersResponse.data.orders;
-        stats.totalOrders = ordersResponse.data.total;
-        stats.totalSpent = orders.reduce((sum, order) => sum + order.total, 0);
+      // SDK returns data directly: { orders: [...], total, page, perPage }
+      if (ordersResponse && ordersResponse.orders) {
+        orders = ordersResponse.orders;
+        stats.totalOrders = ordersResponse.total || 0;
+        stats.totalSpent = orders.reduce((sum, order) => sum + (order.total || 0), 0);
       }
     } catch (e) {
       console.error('Failed to load dashboard:', e);

@@ -2,7 +2,7 @@
   import { goto } from '$app/navigation';
   import { cartStore } from '$lib/stores/cart.svelte';
   import { authStore } from '$lib/stores/auth.svelte';
-  import { Card } from '$lib/components/ui/card';
+  import * as Card from '$lib/components/ui/card';
   import { Button } from '$lib/components/ui/button';
   import { Input } from '$lib/components/ui/input';
   import { Separator } from '$lib/components/ui/separator';
@@ -15,7 +15,7 @@
     if (newQuantity < 1) {
       await cartStore.removeItem(itemId);
     } else {
-      await cartStore.updateItemQuantity(itemId, newQuantity);
+      await cartStore.updateItem(itemId, newQuantity);
     }
   }
 
@@ -56,7 +56,7 @@
 </svelte:head>
 
 <div class="min-h-screen bg-background">
-  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <!-- Back Button -->
     <Button variant="ghost" class="mb-6" onclick={() => goto('/store')}>
       <ArrowLeft class="h-4 w-4 mr-2" />
@@ -90,6 +90,12 @@
         <!-- Cart Items -->
         <div class="lg:col-span-2 space-y-4">
           {#each cartStore.cart.items as item (item.id)}
+          {@const isDigital = item.offeringName?.toLowerCase().includes('ebook') ||
+                              item.offeringName?.toLowerCase().includes('e-book') ||
+                              item.offeringName?.toLowerCase().includes('digital') ||
+                              item.offeringName?.toLowerCase().includes('workbook') ||
+                              item.offeringName?.toLowerCase().includes('blueprint') ||
+                              item.offeringName?.toLowerCase().includes('guide')}
             <Card.Root>
               <Card.Content class="p-4">
                 <div class="flex gap-4">
@@ -135,23 +141,33 @@
                       <Trash2 class="h-4 w-4" />
                     </Button>
 
-                    <div class="flex items-center gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onclick={() => updateQuantity(item.id, item.quantity - 1)}
-                      >
-                        <Minus class="h-3 w-3" />
-                      </Button>
-                      <span class="w-8 text-center font-medium">{item.quantity}</span>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onclick={() => updateQuantity(item.id, item.quantity + 1)}
-                      >
-                        <Plus class="h-3 w-3" />
-                      </Button>
-                    </div>
+                    {#if isDigital}
+                      <!-- Digital product - quantity locked at 1 -->
+                      <div class="flex items-center gap-2">
+                        <span class="text-sm text-muted-foreground px-3 py-1 bg-muted rounded">
+                          Digital Product
+                        </span>
+                      </div>
+                    {:else}
+                      <!-- Physical product - quantity controls -->
+                      <div class="flex items-center gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onclick={() => updateQuantity(item.id, item.quantity - 1)}
+                        >
+                          <Minus class="h-3 w-3" />
+                        </Button>
+                        <span class="w-8 text-center font-medium">{item.quantity}</span>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onclick={() => updateQuantity(item.id, item.quantity + 1)}
+                        >
+                          <Plus class="h-3 w-3" />
+                        </Button>
+                      </div>
+                    {/if}
 
                     <div class="text-right">
                       <p class="text-sm text-muted-foreground">Subtotal</p>

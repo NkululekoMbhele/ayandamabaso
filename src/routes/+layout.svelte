@@ -1,11 +1,11 @@
 <script lang="ts">
 	import '../app.css';
 	import { ModeWatcher } from 'mode-watcher';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { browser } from '$app/environment';
 	import { authStore } from '$lib/stores/auth.svelte';
 	import { cartStore } from '$lib/stores/cart.svelte';
-	import { LoginModal, RegisterModal } from '@tredicik/portal-sdk-svelte/components';
+	import { LoginModal, RegisterModal } from '$lib/components/auth';
 	import { Button } from '$lib/components/ui/button';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import {
@@ -19,10 +19,13 @@
 		Home,
 		Store,
 		Instagram,
-		Linkedin,
 		Mail,
 		MapPin,
-		ArrowRight
+		ArrowRight,
+		Trash2,
+		Minus,
+		Plus,
+		ShoppingBag
 	} from 'lucide-svelte';
 
 	let { children } = $props();
@@ -32,6 +35,26 @@
 	let showMobileMenu = $state(false);
 	let showUserMenu = $state(false);
 	let scrolled = $state(false);
+	let showCartPreview = $state(false);
+	let cartHoverTimeout: ReturnType<typeof setTimeout> | null = null;
+
+	function handleCartMouseEnter() {
+		if (cartHoverTimeout) clearTimeout(cartHoverTimeout);
+		showCartPreview = true;
+	}
+
+	function handleCartMouseLeave() {
+		cartHoverTimeout = setTimeout(() => {
+			showCartPreview = false;
+		}, 150);
+	}
+
+	function formatPrice(amount: number): string {
+		return new Intl.NumberFormat('en-ZA', {
+			style: 'currency',
+			currency: 'ZAR'
+		}).format(amount);
+	}
 
 	// Listen for scroll
 	$effect(() => {
@@ -70,9 +93,17 @@
 
 	// Close menus on route change
 	$effect(() => {
-		$page.url.pathname;
+		page.url.pathname;
 		showMobileMenu = false;
 		showUserMenu = false;
+		showCartPreview = false;
+	});
+
+	// Cleanup cart hover timeout on destroy
+	$effect(() => {
+		return () => {
+			if (cartHoverTimeout) clearTimeout(cartHoverTimeout);
+		};
 	});
 
 	function handleLogout() {
@@ -85,14 +116,13 @@
 		{ href: '/about', label: 'About', icon: User },
 		{ href: '/services', label: 'Services', icon: Package },
 		{ href: '/speaking', label: 'Speaking', icon: Calendar },
-		{ href: '/store', label: 'Shop', icon: Store },
+		{ href: '/store', label: 'Consultations', icon: Store },
 		{ href: '/contact', label: 'Contact', icon: Mail }
 	];
 
 	const socialLinks = [
-		{ href: 'https://instagram.com/ayandamabaso_official', icon: Instagram, label: 'Instagram' },
-		{ href: 'https://tiktok.com/@ayandamabaso_official', icon: null, label: 'TikTok' },
-		{ href: 'https://linkedin.com/in/ayandamabaso', icon: Linkedin, label: 'LinkedIn' }
+		{ href: 'https://www.instagram.com/ayandamabaso_official/', icon: Instagram, label: 'Instagram' },
+		{ href: 'https://www.tiktok.com/@ayanda.mabaso.marketing', icon: null, label: 'TikTok' }
 	];
 </script>
 
@@ -123,12 +153,12 @@
 						<a
 							href={link.href}
 							class="relative text-sm font-medium transition-colors duration-200
-								{$page.url.pathname === link.href
+								{page.url.pathname === link.href
 									? 'text-accent'
 									: 'text-muted-foreground hover:text-foreground'}"
 						>
 							{link.label}
-							{#if $page.url.pathname === link.href}
+							{#if page.url.pathname === link.href}
 								<span class="absolute -bottom-1 left-0 right-0 h-0.5 bg-accent rounded-full"></span>
 							{/if}
 						</a>
@@ -137,27 +167,138 @@
 
 				<!-- Right Side Actions -->
 				<div class="flex items-center gap-3">
-					<!-- Cart -->
-					<a
-						href="/cart"
-						class="relative p-2.5 rounded-xl hover:bg-muted transition-colors duration-200"
+					<!-- Cart with Hover Preview -->
+					<div
+						class="relative"
+						role="group"
+						aria-label="Shopping cart"
+						onmouseenter={handleCartMouseEnter}
+						onmouseleave={handleCartMouseLeave}
 					>
-						<ShoppingCart class="h-5 w-5 text-foreground" />
-						{#if cartStore.itemsCount > 0}
-							<span
-								class="absolute -top-0.5 -right-0.5 bg-accent text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center animate-fade-in"
+						<a
+							href="/cart"
+							class="relative p-2.5 rounded-xl hover:bg-muted transition-colors duration-200 block"
+						>
+							<ShoppingCart class="h-5 w-5 text-foreground" />
+							{#if cartStore.itemsCount > 0}
+								<span
+									class="absolute -top-0.5 -right-0.5 bg-accent text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center animate-fade-in"
+								>
+									{cartStore.itemsCount}
+								</span>
+							{/if}
+						</a>
+
+						<!-- Cart Preview Dropdown -->
+						{#if showCartPreview}
+							<div
+								class="absolute right-0 mt-2 w-80 bg-white rounded-2xl shadow-elegant border border-border/50 overflow-hidden animate-fade-in z-50"
+								role="tooltip"
+								onmouseenter={handleCartMouseEnter}
+								onmouseleave={handleCartMouseLeave}
 							>
-								{cartStore.itemsCount}
-							</span>
+								{#if cartStore.isEmpty}
+									<!-- Empty State -->
+									<div class="p-6 text-center">
+										<div class="w-12 h-12 mx-auto mb-3 rounded-full bg-muted flex items-center justify-center">
+											<ShoppingBag class="h-6 w-6 text-muted-foreground" />
+										</div>
+										<p class="text-sm font-medium text-foreground mb-1">Your cart is empty</p>
+										<p class="text-xs text-muted-foreground mb-4">Add a consultation to get started</p>
+										<a
+											href="/store"
+											class="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-accent transition-colors"
+										>
+											Browse Consultations
+											<ArrowRight class="h-4 w-4" />
+										</a>
+									</div>
+								{:else}
+									<!-- Cart Items -->
+									<div class="max-h-72 overflow-y-auto">
+										{#each cartStore.items as item (item.id)}
+											<div class="flex gap-3 p-3 border-b border-border/50 last:border-b-0 hover:bg-muted/50 transition-colors">
+												<!-- Item Image -->
+												{#if item.imageUrl}
+													<div class="w-14 h-14 rounded-lg overflow-hidden bg-muted shrink-0">
+														<img
+															src={item.imageUrl}
+															alt={item.offeringName}
+															class="w-full h-full object-cover"
+														/>
+													</div>
+												{:else}
+													<div class="w-14 h-14 rounded-lg bg-muted shrink-0 flex items-center justify-center">
+														<Package class="h-6 w-6 text-muted-foreground" />
+													</div>
+												{/if}
+
+												<!-- Item Details -->
+												<div class="flex-1 min-w-0">
+													<p class="text-sm font-medium text-foreground truncate">{item.offeringName}</p>
+													{#if item.variantName}
+														<p class="text-xs text-muted-foreground">{item.variantName}</p>
+													{/if}
+													<div class="flex items-center justify-between mt-1">
+														<span class="text-xs text-muted-foreground">Qty: {item.quantity}</span>
+														<span class="text-sm font-medium text-foreground">{formatPrice(item.total)}</span>
+													</div>
+												</div>
+
+												<!-- Remove Button -->
+												<button
+													onclick={(e) => {
+														e.preventDefault();
+														e.stopPropagation();
+														cartStore.removeItem(item.id);
+													}}
+													class="cursor-pointer select-none active:scale-95 p-1.5 rounded-lg hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-all shrink-0 self-start"
+													aria-label="Remove item"
+												>
+													<Trash2 class="h-4 w-4" />
+												</button>
+											</div>
+										{/each}
+									</div>
+
+									<!-- Cart Summary -->
+									<div class="p-4 bg-muted/30 border-t border-border/50">
+										<div class="flex items-center justify-between mb-3">
+											<span class="text-sm text-muted-foreground">Subtotal ({cartStore.itemsCount} {cartStore.itemsCount === 1 ? 'item' : 'items'})</span>
+											<span class="text-sm font-semibold text-foreground">{formatPrice(cartStore.subtotal)}</span>
+										</div>
+										{#if cartStore.discount > 0}
+											<div class="flex items-center justify-between mb-3">
+												<span class="text-sm text-green-600">Discount</span>
+												<span class="text-sm font-medium text-green-600">-{formatPrice(cartStore.discount)}</span>
+											</div>
+										{/if}
+										<div class="flex gap-2">
+											<a
+												href="/cart"
+												class="flex-1 py-2.5 px-4 text-sm font-medium text-center rounded-xl border border-border hover:bg-muted transition-colors"
+											>
+												View Cart
+											</a>
+											<a
+												href="/checkout"
+												class="flex-1 py-2.5 px-4 text-sm font-medium text-center rounded-xl bg-primary text-white hover:bg-primary/90 transition-colors"
+											>
+												Checkout
+											</a>
+										</div>
+									</div>
+								{/if}
+							</div>
 						{/if}
-					</a>
+					</div>
 
 					<!-- Auth Buttons / User Menu -->
 					{#if authStore.isAuthenticated && authStore.user}
 						<div class="relative">
 							<button
 								onclick={() => (showUserMenu = !showUserMenu)}
-								class="flex items-center gap-2 p-1.5 rounded-xl hover:bg-muted transition-colors duration-200"
+								class="cursor-pointer select-none active:scale-[0.98] flex items-center gap-2 p-1.5 rounded-xl hover:bg-muted transition-all duration-200"
 							>
 								<Avatar.Root class="h-9 w-9">
 									<Avatar.Fallback class="bg-primary text-white text-sm font-medium">
@@ -195,7 +336,7 @@
 									<hr class="my-2 border-border/50" />
 									<button
 										onclick={handleLogout}
-										class="flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-muted transition-colors w-full text-left text-destructive"
+										class="cursor-pointer select-none active:scale-[0.98] flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-muted transition-all w-full text-left text-destructive"
 									>
 										<LogOut class="h-4 w-4" />
 										Sign Out
@@ -225,7 +366,7 @@
 
 					<!-- Mobile Menu Toggle -->
 					<button
-						class="md:hidden p-2.5 rounded-xl hover:bg-muted transition-colors duration-200"
+						class="cursor-pointer select-none active:scale-95 md:hidden p-2.5 rounded-xl hover:bg-muted transition-all duration-200"
 						onclick={() => (showMobileMenu = !showMobileMenu)}
 					>
 						{#if showMobileMenu}
@@ -248,7 +389,7 @@
 						<a
 							href={link.href}
 							class="flex items-center gap-4 px-4 py-4 rounded-xl text-lg font-medium transition-colors
-								{$page.url.pathname === link.href
+								{page.url.pathname === link.href
 									? 'bg-accent/10 text-accent'
 									: 'hover:bg-muted text-foreground'}"
 							onclick={() => (showMobileMenu = false)}
@@ -332,7 +473,7 @@
 						/>
 						<button
 							type="submit"
-							class="absolute right-1.5 top-1/2 -translate-y-1/2 h-11 px-6 bg-accent hover:bg-accent/90 text-white text-sm font-medium rounded-full transition-colors flex items-center gap-2"
+							class="cursor-pointer select-none active:scale-95 absolute right-1.5 top-1/2 -translate-y-1/2 h-11 px-6 bg-accent hover:bg-accent/90 text-white text-sm font-medium rounded-full transition-all flex items-center gap-2"
 						>
 							Subscribe
 							<ArrowRight class="w-4 h-4" />
@@ -423,7 +564,7 @@
 						</li>
 						<li>
 							<a href="/store" class="text-sm text-white/70 hover:text-accent transition-colors duration-200">
-								Digital Products
+								Consultations
 							</a>
 						</li>
 					</ul>
@@ -469,7 +610,7 @@
 <LoginModal
 	bind:open={showLoginModal}
 	{authStore}
-	brandName="Ayanda Mabaso"
+	description="Sign in to your account"
 	primaryColor="#1a1a2e"
 	accentColor="#e94560"
 	onSwitchToRegister={() => {
@@ -480,7 +621,7 @@
 <RegisterModal
 	bind:open={showRegisterModal}
 	{authStore}
-	brandName="Ayanda Mabaso"
+	description="Create your account"
 	primaryColor="#1a1a2e"
 	accentColor="#e94560"
 	onSwitchToLogin={() => {

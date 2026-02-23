@@ -1,15 +1,16 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import { portal } from '$lib/portal';
   import { cartStore } from '$lib/stores/cart.svelte';
   import type { Product } from '@tredicik/portal-sdk';
-  import { Card } from '$lib/components/ui/card';
+  import * as Card from '$lib/components/ui/card';
   import { Button } from '$lib/components/ui/button';
   import { Badge } from '$lib/components/ui/badge';
   import { Separator } from '$lib/components/ui/separator';
-  import { ShoppingCart, BookOpen, Loader2, ArrowLeft, Star } from 'lucide-svelte';
+  import { ShoppingCart, BookOpen, Loader2, ArrowLeft, Star, CheckCircle, XCircle } from 'lucide-svelte';
   import { goto } from '$app/navigation';
+  import DOMPurify from 'dompurify';
 
   let product = $state<Product | null>(null);
   let isLoading = $state(true);
@@ -17,22 +18,33 @@
   let quantity = $state(1);
   let selectedImage = $state(0);
 
-  const productId = $derived(parseInt($page.url.pathname.split('/').pop() || '0'));
+  // Toast notification state
+  let notification = $state<{ type: 'success' | 'error'; message: string } | null>(null);
+  let notificationTimeout: ReturnType<typeof setTimeout> | null = null;
+
+  function showNotification(type: 'success' | 'error', message: string) {
+    if (notificationTimeout) clearTimeout(notificationTimeout);
+    notification = { type, message };
+    notificationTimeout = setTimeout(() => { notification = null; }, 3000);
+  }
+
+  const productId = $derived(parseInt(page.url.pathname.split('/').pop() || '0'));
 
   async function loadProduct() {
     isLoading = true;
     error = null;
 
     try {
-      const response = await portal.products.getProduct(productId);
+      // SDK returns Product directly
+      const productData = await portal.products.getProduct(productId);
 
-      if (response.success && response.data) {
-        product = response.data;
-        if (product.images.length > 0) {
+      if (productData) {
+        product = productData;
+        if (product.images && product.images.length > 0) {
           selectedImage = 0;
         }
       } else {
-        error = response.error || 'Product not found';
+        error = 'Product not found';
       }
     } catch (e: any) {
       error = e.message || 'Failed to load product';
@@ -49,13 +61,14 @@
       offeringName: product.name,
       quantity,
       unitPrice: product.salePrice || product.price,
-      imageUrl: product.thumbnail || product.images[0]?.url
+      imageUrl: product.thumbnail || product.images?.[0]?.url
     });
 
     if (result.success) {
-      goto('/cart');
+      showNotification('success', `${product.name} added to cart!`);
+      setTimeout(() => goto('/cart'), 1000);
     } else {
-      alert(result.error || 'Failed to add to cart');
+      showNotification('error', result.error || 'Failed to add to cart');
     }
   }
 
@@ -69,6 +82,23 @@
 </svelte:head>
 
 <div class="min-h-screen bg-background">
+  <!-- Toast Notification -->
+  {#if notification}
+    <div class="fixed top-4 right-4 z-50 animate-in slide-in-from-top-2 fade-in duration-300">
+      <div class="flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg {notification.type === 'success'
+        ? 'bg-green-50 border border-green-200 text-green-800'
+        : 'bg-red-50 border border-red-200 text-red-800'}">
+        {#if notification.type === 'success'}
+          <CheckCircle class="h-5 w-5 text-green-600" />
+        {:else}
+          <XCircle class="h-5 w-5 text-red-600" />
+        {/if}
+        <span class="font-medium">{notification.message}</span>
+        <button onclick={() => (notification = null)} class="cursor-pointer select-none active:scale-90 ml-2 text-gray-400 hover:text-gray-600 transition-all" aria-label="Close notification">×</button>
+      </div>
+    </div>
+  {/if}
+
   <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <!-- Back Button -->
     <Button variant="ghost" class="mb-6" onclick={() => goto('/store')}>
@@ -113,12 +143,12 @@
             {/if}
           </div>
 
-          {#if product.images.length > 1}
+          {#if product.images && product.images.length > 1}
             <div class="grid grid-cols-4 gap-2">
-              {#each product.images as image, index}
+              {#each product.images as image, index (image.url || index)}
                 <button
                   onclick={() => (selectedImage = index)}
-                  class="aspect-square bg-muted rounded-lg overflow-hidden border-2 {selectedImage === index
+                  class="cursor-pointer select-none active:scale-95 aspect-square bg-muted rounded-lg overflow-hidden border-2 transition-all {selectedImage === index
                     ? 'border-primary'
                     : 'border-transparent'}"
                 >
@@ -144,7 +174,7 @@
           {#if product.rating}
             <div class="flex items-center gap-2 mb-4">
               <div class="flex items-center">
-                {#each Array(5) as _, i}
+                {#each Array(5) as _, i (i)}
                   <Star
                     class="h-5 w-5 {i < Math.floor(product.rating)
                       ? 'fill-yellow-400 text-yellow-400'
@@ -231,7 +261,7 @@
             <div>
               <h2 class="text-xl font-semibold mb-4">Description</h2>
               <div class="prose max-w-none text-muted-foreground">
-                {@html product.description}
+                {@html DOMPurify.sanitize(product.description)}
               </div>
             </div>
           {/if}
@@ -242,7 +272,7 @@
             <div>
               <h2 class="text-xl font-semibold mb-4">Details</h2>
               <dl class="space-y-2">
-                {#each product.attributes as attr}
+                {#each product.attributes as attr (attr.name)}
                   <div class="flex gap-4">
                     <dt class="font-medium text-foreground w-1/3">{attr.name}:</dt>
                     <dd class="text-muted-foreground">{attr.value}</dd>

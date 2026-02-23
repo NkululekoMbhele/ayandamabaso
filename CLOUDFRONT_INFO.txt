@@ -1,0 +1,9 @@
+CloudFront Distribution Created!
+
+Distribution ID: E2H8F5E7PSXPRH
+Domain: d3bp7zk1dpces5.cloudfront.net  
+Status: InProgress (deploying now, ~10-15 minutes)
+Created: 2026-02-14 13:12:48 UTC
+
+Note: Created without custom SSL initially.
+Will update to add custom domain + SSL once ACM certificate validates.

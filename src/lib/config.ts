@@ -5,6 +5,8 @@
  * Ayanda Mabaso website, including branding, features, and API integration.
  */
 
+import type { BusinessHours } from '$lib/types/booking';
+
 export interface TenantTheme {
 	primary: string;
 	secondary: string;
@@ -34,10 +36,17 @@ export interface TenantConfig {
 		twitter?: string;
 		linkedin?: string;
 	};
+	businessHours?: BusinessHours;
+	consultations?: {
+		enabled: boolean;
+		defaultBufferMinutes: number;
+		advanceBookingDays: number;
+		maxBookingDays: number;
+	};
 }
 
 export const tenantConfig: TenantConfig = {
-	tenantId: 41,
+	tenantId: Number(import.meta.env.VITE_TENANT_ID) || 41,
 	name: 'Ayanda Mabaso',
 	domain: 'ayandamabaso.co.za',
 	theme: {
@@ -59,6 +68,21 @@ export const tenantConfig: TenantConfig = {
 		instagram: 'https://instagram.com/ayandamabaso',
 		facebook: 'https://facebook.com/ayandamabaso',
 		linkedin: 'https://linkedin.com/in/ayandamabaso'
+	},
+	businessHours: {
+		monday: { start: '09:00', end: '17:00' },
+		tuesday: { start: '09:00', end: '17:00' },
+		wednesday: { start: '09:00', end: '17:00' },
+		thursday: { start: '09:00', end: '17:00' },
+		friday: { start: '09:00', end: '17:00' },
+		saturday: null,
+		sunday: null
+	},
+	consultations: {
+		enabled: true,
+		defaultBufferMinutes: 15,
+		advanceBookingDays: 1,
+		maxBookingDays: 90
 	}
 };
 

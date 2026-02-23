@@ -96,7 +96,15 @@ Build output is in the `build/` directory after running `npm run build`.
 
 ## Development
 
-The development server will start at `http://localhost:5173` by default.
+The development server is configured to run on port 5176. Start the server with:
+
+```bash
+npm run dev
+```
+
+The app will be available at `http://localhost:5176`.
+
+**Note:** Always use port 5176 for this application to avoid conflicts with other projects.
 
 ## Integration
 
