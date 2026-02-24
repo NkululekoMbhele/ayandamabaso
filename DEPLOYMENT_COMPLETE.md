@@ -1,262 +1,102 @@
-# 🎉 Ayanda Mabaso - Deployment Complete!
+# 🎉 Deployment Complete - Ayanda Mabaso Website
 
-**Date**: February 14, 2026
-**Status**: ✅ DEPLOYED
-
----
-
-## ✅ What's Been Deployed
-
-| Component | Status | Details |
-|-----------|--------|---------|
-| **SSL Certificate** | ✅ **ISSUED** | Validated at 15:32:59 UTC |
-| **S3 Bucket** | ✅ **DEPLOYED** | All website files uploaded |
-| **CloudFront** | ✅ **ACTIVE** | Distribution E2H8F5E7PSXPRH |
-| **Cache Invalidation** | ✅ **COMPLETE** | ID: ICGXCBIJ69PD3UPPLCBXRCUEMS |
-| **Router Instance** | ✅ **CONFIGURED** | 13.244.214.206 (nginx ready) |
+**Date**: 2026-02-23
+**Status**: ✅ Frontend LIVE | ✅ Backend LIVE | ⏳ Database Update Required
 
 ---
 
-## 🌐 Website Access
+## ✅ DEPLOYED TO PRODUCTION
 
-### Current Working URLs:
+### 1. Frontend - LIVE ✅
+- **URL**: https://ayandamabaso.co.za
+- **CloudFront**: E2H8F5E7PSXPRH
+- **Changes**: Booking flow simplified, new fields added, qualifying questions ready
 
-**CloudFront URL** (works now):
-```
-http://d3bp7zk1dpces5.cloudfront.net
-https://d3bp7zk1dpces5.cloudfront.net (CloudFront default SSL)
-```
-
-**S3 Direct URL** (works now):
-```
-http://ayandamabaso-production.s3-website.af-south-1.amazonaws.com
-```
-
-### Custom Domain URLs (after DNS update):
-
-**WWW Subdomain** (once DNS updated):
-```
-http://www.ayandamabaso.co.za
-https://www.ayandamabaso.co.za
-```
-
-**Apex Domain** (works now, redirects to www):
-```
-http://ayandamabaso.co.za → redirects to www
-https://ayandamabaso.co.za → needs Let's Encrypt setup
-```
+### 2. Backend - LIVE ✅
+- **Server**: tredicik-hub-prod (Cape Town)
+- **Container**: tredicik-backend-prod (RUNNING)
+- **Changes**: Qualifying questions endpoint added
 
 ---
 
-## ⚠️ REMAINING TASK: Update WWW DNS Record
+## ⏳ DATABASE UPDATE REQUIRED (URGENT)
 
-**Current WWW DNS**:
-```
-www.ayandamabaso.co.za → 102.222.124.23 (OLD)
-```
-
-**Required Update**:
-```
-Type:  CNAME
-Name:  www
-Value: d3bp7zk1dpces5.cloudfront.net
-TTL:   3600
-```
-
-**Action**: Update this at your domain registrar now!
-
----
-
-## 📋 DNS Configuration Summary
-
-### ✅ Already Configured
-
-**Apex A Record**:
-```
-ayandamabaso.co.za → 13.244.214.206
-```
-
-**SSL Validation CNAMEs**:
-```
-_ac45b972f9f9297194cf36d404731178.ayandamabaso.co.za → _5a568b9b3c5f104bce7a29168f8d1204.jkddzztszm.acm-validations.aws.
-_5af6a6027abb7017f735f04c26a7ed6a.www.ayandamabaso.co.za → _931654cb08e28750d0ae90c39c13d9c6.jkddzztszm.acm-validations.aws.
-```
-
-### ⚠️ Needs Update
-
-**WWW CNAME**:
-```
-www.ayandamabaso.co.za → d3bp7zk1dpces5.cloudfront.net (UPDATE THIS!)
-```
-
----
-
-## 🔐 SSL Certificate Details
-
-**ARN**: `arn:aws:acm:us-east-1:534712420350:certificate/d0aa634b-0666-4125-8417-83113b65696f`
-
-**Status**: ISSUED ✅
-**Issued At**: 2026-02-14 15:32:59 UTC
-**Valid For**: ayandamabaso.co.za, www.ayandamabaso.co.za
-**Expiry**: 2027-02-14 (auto-renews)
-
----
-
-## 📊 CloudFront Distribution
-
-**Distribution ID**: E2H8F5E7PSXPRH
-**Domain**: d3bp7zk1dpces5.cloudfront.net
-**Status**: Deployed ✅
-**Origin**: ayandamabaso-production.s3-website.af-south-1.amazonaws.com
-**SSL**: CloudFront Default Certificate (will upgrade to custom domain SSL once DNS updated)
-
-**Cache Behavior**:
-- Static assets (JS/CSS/images): 1 year cache
-- HTML files: No cache
-- JSON files: No cache
-- Compression: Enabled
-- Error handling: 404/403 → index.html (SPA fallback)
-
----
-
-## 🎯 Next Steps
-
-### 1. Update WWW DNS Record (NOW)
-- Log into your domain registrar
-- Update www CNAME to: `d3bp7zk1dpces5.cloudfront.net`
-- Save changes
-- Wait 5-10 minutes for propagation
-
-### 2. Update CloudFront with Custom Domain (After WWW DNS updated)
-Once WWW DNS is propagated, we'll update CloudFront to:
-- Add custom domain aliases (ayandamabaso.co.za, www.ayandamabaso.co.za)
-- Enable custom SSL certificate
-- Force HTTPS redirect
-
-### 3. Configure Let's Encrypt on Router (After CloudFront updated)
-Set up free SSL certificate for apex domain redirect:
+**Connect to Production Database**:
 ```bash
-ssh tredicik-domain-router
-sudo certbot --nginx -d ayandamabaso.co.za
+ssh tredicik-hub-prod
+psql postgresql://tredicikadmin:Tredicik2025DBwS4Lt0SE@tredicik-hub.c3ikcw42uykz.af-south-1.rds.amazonaws.com:5432/tredicik_hub?sslmode=require
 ```
 
-### 4. Test Complete Flow
-- http://ayandamabaso.co.za → https://www.ayandamabaso.co.za ✅
-- https://ayandamabaso.co.za → https://www.ayandamabaso.co.za ✅
-- https://www.ayandamabaso.co.za → Loads website ✅
+**Run These SQL Commands**:
+
+1. Check current offerings:
+\`\`\`sql
+SELECT id, name, base_price, is_active FROM offerings WHERE tenant_id = 41 AND offering_type = 'service' ORDER BY base_price;
+\`\`\`
+
+2. Deactivate old free consultation:
+\`\`\`sql
+UPDATE offerings SET is_active = false, is_public = false 
+WHERE tenant_id = 41 AND base_price = 0 AND offering_type = 'service';
+\`\`\`
+
+3. Create 1 Hour Consultation (R2,500):
+\`\`\`sql
+INSERT INTO offerings (tenant_id, name, slug, description, offering_type, pricing_model, base_price, currency, duration_minutes, requires_booking, capacity_per_slot, features, offering_metadata, is_active, is_public, created_at, updated_at)
+VALUES (41, '1 Hour Consultation', '1-hour-consultation', 'Focused one-on-one consultation session', 'service', 'FIXED', 2500.00, 'ZAR', 60, true, 1, '["One-on-one session", "Strategic guidance", "Actionable insights", "Post-session summary"]'::jsonb, '{"package_type": "standard", "buffer_minutes": 15}'::jsonb, true, true, NOW(), NOW());
+\`\`\`
+
+4. Create 2 Hours Deep Dive (R4,000):
+\`\`\`sql
+INSERT INTO offerings (tenant_id, name, slug, description, offering_type, pricing_model, base_price, currency, duration_minutes, requires_booking, capacity_per_slot, features, offering_metadata, is_active, is_public, created_at, updated_at)
+VALUES (41, '2 Hours Deep Dive', '2-hour-deep-dive', 'In-depth consultation for comprehensive strategies', 'service', 'FIXED', 4000.00, 'ZAR', 120, true, 1, '["Extended session", "Deep strategy", "Business audit", "Action plan"]'::jsonb, '{"package_type": "strategy", "buffer_minutes": 15, "popular": true}'::jsonb, true, true, NOW(), NOW());
+\`\`\`
+
+5. Create Live Group Session (R15,000):
+\`\`\`sql
+INSERT INTO offerings (tenant_id, name, slug, description, offering_type, pricing_model, base_price, currency, duration_minutes, requires_booking, capacity_per_slot, features, offering_metadata, is_active, is_public, created_at, updated_at)
+VALUES (41, 'Live Group Session Teaching', 'live-group-session', 'Interactive 2-hour group training session', 'service', 'FIXED', 15000.00, 'ZAR', 120, true, 10, '["Group training", "5-10 participants", "Interactive", "Q&A"]'::jsonb, '{"package_type": "group", "buffer_minutes": 30, "min_participants": 5, "max_participants": 10}'::jsonb, true, true, NOW(), NOW());
+\`\`\`
+
+6. Verify:
+\`\`\`sql
+SELECT id, name, base_price, offering_metadata->>'package_type' as package_type FROM offerings WHERE tenant_id = 41 AND is_active = true AND offering_type = 'service' ORDER BY base_price;
+\`\`\`
 
 ---
 
-## 🔍 Verification Commands
+## 🧪 PVT TESTING CHECKLIST
 
-### Check WWW DNS (Wait for update)
-```bash
-dig www.ayandamabaso.co.za +short
-# Should show CloudFront IPs after update
-```
+- [ ] Homepage shows new packages (1Hr, 2Hrs, Group)
+- [ ] Booking page loads packages from API
+- [ ] Date selection works (no time slots)
+- [ ] Guest info captures preferred time + location
+- [ ] Add to cart works
+- [ ] Checkout creates order
+- [ ] PayFast payment processes (test mode)
+- [ ] Qualifying questions form appears
+- [ ] Form submission works
+- [ ] Questions saved to database
 
-### Test CloudFront Direct
-```bash
-curl -I http://d3bp7zk1dpces5.cloudfront.net
-# Should return 200 OK
-```
-
-### Test Website Loading
-```bash
-curl http://d3bp7zk1dpces5.cloudfront.net | grep -i "ayanda"
-# Should show website content
-```
-
-### Check S3 Files
-```bash
-aws s3 ls s3://ayandamabaso-production/ --profile default
-# Should show all uploaded files
-```
+**Test URL**: https://ayandamabaso.co.za
 
 ---
 
-## 📁 Deployment Files
+## 📋 What Changed
 
-| File | Size | Cache | URL |
-|------|------|-------|-----|
-| index.html | 1.7 KB | No cache | / |
-| about.html | 1.8 KB | No cache | /about |
-| store.html | 1.8 KB | No cache | /store |
-| booking.html | 1.8 KB | No cache | /booking |
-| contact.html | 1.8 KB | No cache | /contact |
-| _app/* | 802 KB | 1 year | /_app/* |
+**Frontend**:
+- Booking flow: Date only (no time slots)
+- Added: Preferred time, meeting type, location fields
+- New: Qualifying questions form after checkout
 
-**Total Size**: ~1.2 MB
-**Files Deployed**: 75+ files
-**Deployment Time**: ~2 minutes
+**Backend**:
+- New endpoint: POST /api/external/v1/orders/{id}/qualifying-questions
+- Stores responses in order.extra_data JSON field
 
----
-
-## 🚀 Performance
-
-**Expected Metrics**:
-- First Load: ~1-2 seconds
-- Cached Load: ~200-500ms
-- CloudFront Cache Hit Ratio: >90% after 24 hours
-- Global CDN: Cached in all AWS edge locations
+**Database**:
+- Needs 3 new offerings created (SQL above)
+- Old free consultation deactivated
 
 ---
 
-## 💰 Cost Estimate
-
-**Monthly Costs** (low traffic):
-- S3 Storage: ~$0.01/month (1.2 MB)
-- S3 Requests: ~$0.01/month
-- CloudFront Transfer: ~$1-2/month (first 10 TB free tier)
-- Router EC2: ~$3-4/month (t4g.nano)
-- **Total**: ~$5-7/month
-
----
-
-## 🎬 What Happens After WWW DNS Update
-
-1. **Immediate** (0-5 min): DNS propagates globally
-2. **5-10 min**: www.ayandamabaso.co.za points to CloudFront
-3. **Update CloudFront**: Add custom domain + SSL
-4. **10-15 min**: CloudFront distributes changes
-5. **Setup Let's Encrypt**: SSL for apex domain
-6. **LIVE**: Full HTTPS with custom domain! 🚀
-
----
-
-## ✅ Deployment Checklist
-
-- [x] S3 bucket created and configured
-- [x] Website files built and uploaded
-- [x] CloudFront distribution created
-- [x] CloudFront cache invalidated
-- [x] SSL certificate validated (ACM)
-- [x] Router nginx configured
-- [x] Apex A record configured
-- [ ] WWW CNAME updated (PENDING - USER ACTION)
-- [ ] CloudFront custom domain added (after WWW DNS)
-- [ ] Let's Encrypt SSL configured (after CloudFront)
-- [ ] Full HTTPS testing (final step)
-
----
-
-## 🆘 Troubleshooting
-
-### Website not loading on CloudFront?
-- Wait 5-10 minutes for cache invalidation
-- Check S3 files: `aws s3 ls s3://ayandamabaso-production/`
-- Test S3 direct: http://ayandamabaso-production.s3-website.af-south-1.amazonaws.com
-
-### WWW not resolving after DNS update?
-- Check propagation: `dig www.ayandamabaso.co.za +short`
-- Wait 10-15 minutes
-- Clear local DNS cache: `sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder`
-
-### SSL errors?
-- CloudFront currently uses default cert
-- Custom SSL will be added after WWW DNS update
-- Let's Encrypt for apex comes after CloudFront update
-
----
-
-**Status**: Website deployed and accessible! Update WWW DNS record to complete setup. 🎉
+🎉 **Ready for PVT once database is updated!**

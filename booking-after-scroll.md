@@ -1,0 +1,209 @@
+- generic [ref=e1]:
+  - generic [ref=e283]:
+    - log
+    - log
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e6]:
+        - link "Ay anda Mabaso" [ref=e7] [cursor=pointer]:
+          - /url: /
+          - generic [ref=e8]:
+            - generic [ref=e10]: Ay
+            - generic [ref=e11]: anda Mabaso
+        - navigation [ref=e12]:
+          - link "Home" [ref=e13] [cursor=pointer]:
+            - /url: /
+          - link "About" [ref=e14] [cursor=pointer]:
+            - /url: /about
+          - link "Services" [ref=e15] [cursor=pointer]:
+            - /url: /services
+          - link "Speaking" [ref=e16] [cursor=pointer]:
+            - /url: /speaking
+          - link "Consultations" [ref=e17] [cursor=pointer]:
+            - /url: /store
+          - link "Contact" [ref=e18] [cursor=pointer]:
+            - /url: /contact
+        - generic [ref=e19]:
+          - group "Shopping cart" [ref=e20]:
+            - link [ref=e21] [cursor=pointer]:
+              - /url: /cart
+              - img [ref=e22]
+          - generic [ref=e23]:
+            - button "Sign In" [ref=e24] [cursor=pointer]
+            - button "Sign Up" [ref=e25] [cursor=pointer]
+    - main [ref=e26]:
+      - generic [ref=e27]:
+        - generic [ref=e30]:
+          - link "Back to Home" [ref=e31] [cursor=pointer]:
+            - /url: /
+            - img [ref=e32]
+            - generic [ref=e33]: Back to Home
+          - heading "Book Your Consultation" [level=1] [ref=e34]
+          - paragraph [ref=e35]: Get expert marketing consultation to scale your business. Choose your package, select a time, and we'll be in touch.
+        - generic [ref=e39]:
+          - button "Step 1 Choose Package" [ref=e267] [cursor=pointer]:
+            - img [ref=e268]
+            - generic [ref=e44]:
+              - generic [ref=e45]: Step 1
+              - generic [ref=e46]: Choose Package
+          - button "2 Step 2 Select Date" [ref=e49] [cursor=pointer]:
+            - generic [ref=e51]: "2"
+            - generic [ref=e52]:
+              - generic [ref=e53]: Step 2
+              - generic [ref=e54]: Select Date
+          - button "3 Step 3 Contact Information" [disabled] [ref=e57]:
+            - generic [ref=e59]: "3"
+            - generic [ref=e60]:
+              - generic [ref=e61]: Step 3
+              - generic [ref=e62]: Contact Information
+        - generic [ref=e65]:
+          - generic [ref=e66]:
+            - generic [ref=e270]:
+              - generic [ref=e271]:
+                - heading "Select Your Consultation Date" [level=2] [ref=e272]
+                - paragraph [ref=e273]: Choose your preferred date. We'll arrange the specific time via email.
+              - generic [ref=e274]:
+                - generic [ref=e276]:
+                  - img [ref=e277]
+                  - generic [ref=e278]: Select Date
+                - button "Wednesday, 25 February 2026" [ref=e352]:
+                  - img [ref=e280]
+                  - text: Wednesday, 25 February 2026
+              - generic [ref=e353]:
+                - heading "Your Selected Date" [level=3] [ref=e354]
+                - generic [ref=e355]:
+                  - generic [ref=e356]: 25 Feb 2026
+                  - generic [ref=e357]: Wednesday
+                - paragraph [ref=e359]: ✓ We'll contact you within 24 hours to confirm the specific time and any other details.
+            - generic [ref=e156]:
+              - button "Previous" [ref=e282] [cursor=pointer]:
+                - img
+                - text: Previous
+              - button "Next Step" [active] [ref=e237] [cursor=pointer]:
+                - text: Next Step
+                - img
+          - generic [ref=e159]:
+            - generic [ref=e160]:
+              - generic [ref=e161]: Booking Summary
+              - paragraph [ref=e162]: Review your consultation details
+            - generic [ref=e163]:
+              - generic [ref=e238]:
+                - generic [ref=e239]:
+                  - generic [ref=e240]:
+                    - paragraph [ref=e241]: 1 Hour Consultation
+                    - generic [ref=e242]:
+                      - img [ref=e243]
+                      - generic [ref=e244]: 60 minutes
+                  - paragraph [ref=e246]: R 2 500
+                - generic [ref=e247]:
+                  - paragraph [ref=e248]: "Includes:"
+                  - list [ref=e249]:
+                    - listitem [ref=e250]:
+                      - img [ref=e251]
+                      - generic [ref=e252]: One-on-one session
+                    - listitem [ref=e253]:
+                      - img [ref=e254]
+                      - generic [ref=e255]: Strategic guidance
+                    - listitem [ref=e256]:
+                      - img [ref=e257]
+                      - generic [ref=e258]: Actionable insights
+              - separator [ref=e259]
+              - generic [ref=e360]:
+                - paragraph [ref=e361]: "Preferred Date:"
+                - generic [ref=e363]:
+                  - img [ref=e364]
+                  - generic [ref=e365]:
+                    - paragraph [ref=e366]: Wednesday, 25 February 2026
+                    - paragraph [ref=e367]: Wednesday
+                - paragraph [ref=e368]: Time will be confirmed via email within 24 hours
+              - separator [ref=e369]
+              - generic [ref=e260]:
+                - generic [ref=e261]:
+                  - generic [ref=e262]: Subtotal
+                  - generic [ref=e263]: R 2 500
+                - generic [ref=e264]:
+                  - generic [ref=e265]: Total
+                  - generic [ref=e266]: R 2 500
+            - generic [ref=e165]:
+              - button "Add to Cart" [disabled]:
+                - img
+                - text: Add to Cart
+              - paragraph [ref=e166]: Complete all steps to proceed
+    - contentinfo [ref=e167]:
+      - generic [ref=e170]:
+        - heading "Level Up Your Business" [level=3] [ref=e171]
+        - paragraph [ref=e172]: Get exclusive marketing insights, business tips, and updates on upcoming events.
+        - generic [ref=e173]:
+          - textbox "Enter your email" [ref=e174]
+          - button "Subscribe" [ref=e175] [cursor=pointer]:
+            - text: Subscribe
+            - img [ref=e176]
+      - generic [ref=e177]:
+        - generic [ref=e178]:
+          - generic [ref=e179]:
+            - generic [ref=e180]:
+              - generic [ref=e182]: Ay
+              - generic [ref=e183]: anda Mabaso
+            - paragraph [ref=e184]: Digital creator, marketing expert & speaker. Helping businesses generate millions in sales.
+            - generic [ref=e185]:
+              - link "Instagram" [ref=e186] [cursor=pointer]:
+                - /url: https://www.instagram.com/ayandamabaso_official/
+                - img [ref=e187]
+              - link "TikTok" [ref=e188] [cursor=pointer]:
+                - /url: https://www.tiktok.com/@ayanda.mabaso.marketing
+                - img [ref=e189]
+          - generic [ref=e191]:
+            - heading "Quick Links" [level=4] [ref=e192]
+            - list [ref=e193]:
+              - listitem [ref=e194]:
+                - link "Home" [ref=e195] [cursor=pointer]:
+                  - /url: /
+              - listitem [ref=e196]:
+                - link "About" [ref=e197] [cursor=pointer]:
+                  - /url: /about
+              - listitem [ref=e198]:
+                - link "Services" [ref=e199] [cursor=pointer]:
+                  - /url: /services
+              - listitem [ref=e200]:
+                - link "Speaking" [ref=e201] [cursor=pointer]:
+                  - /url: /speaking
+              - listitem [ref=e202]:
+                - link "Consultations" [ref=e203] [cursor=pointer]:
+                  - /url: /store
+              - listitem [ref=e204]:
+                - link "Contact" [ref=e205] [cursor=pointer]:
+                  - /url: /contact
+              - listitem [ref=e206]:
+                - link "My Account" [ref=e207] [cursor=pointer]:
+                  - /url: /dashboard
+          - generic [ref=e208]:
+            - heading "Services" [level=4] [ref=e209]
+            - list [ref=e210]:
+              - listitem [ref=e211]:
+                - link "Marketing Consulting" [ref=e212] [cursor=pointer]:
+                  - /url: /services
+              - listitem [ref=e213]:
+                - link "Keynote Speaking" [ref=e214] [cursor=pointer]:
+                  - /url: /speaking
+              - listitem [ref=e215]:
+                - link "Business Strategy" [ref=e216] [cursor=pointer]:
+                  - /url: /services
+              - listitem [ref=e217]:
+                - link "Consultations" [ref=e218] [cursor=pointer]:
+                  - /url: /store
+          - generic [ref=e219]:
+            - heading "Contact" [level=4] [ref=e220]
+            - list [ref=e221]:
+              - listitem [ref=e222]:
+                - img [ref=e223]
+                - link "biz@mabasomedia.co.za" [ref=e224] [cursor=pointer]:
+                  - /url: mailto:biz@mabasomedia.co.za
+              - listitem [ref=e225]:
+                - img [ref=e226]
+                - generic [ref=e227]: Durban, South Africa
+        - generic [ref=e228]:
+          - paragraph [ref=e229]: © 2026 Ayanda Mabaso. All rights reserved.
+          - paragraph [ref=e230]:
+            - text: Powered by
+            - link "Tredicik" [ref=e231] [cursor=pointer]:
+              - /url: https://tredicik.com

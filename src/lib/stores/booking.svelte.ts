@@ -42,14 +42,12 @@ class BookingStore {
 		this.error = null;
 
 		try {
-			// Fetch products/offerings directly from the store endpoint
-			// Use api.tredicik.com for proper HTTPS support
-			const apiUrl = 'https://api.tredicik.com/api/v1';
+			// Fetch products/offerings via local proxy (bypasses CORS)
 			const apiKey = import.meta.env.VITE_API_KEY || 'pk_live_tenant_41';
 			const tenantId = import.meta.env.VITE_TENANT_ID || '41';
 
 			const response = await fetch(
-				`${apiUrl.replace('/external/v1', '/v1/store')}/products?tenant_id=${tenantId}`,
+				`/api/proxy?path=/products?tenant_id=${tenantId}`,
 				{
 					headers: {
 						'X-API-Key': apiKey,

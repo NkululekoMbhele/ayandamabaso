@@ -1,0 +1,151 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e6]:
+      - link "Ay anda Mabaso" [ref=e7] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e8]:
+          - generic [ref=e10]: Ay
+          - generic [ref=e11]: anda Mabaso
+      - navigation [ref=e12]:
+        - link "Home" [ref=e13] [cursor=pointer]:
+          - /url: /
+        - link "About" [ref=e14] [cursor=pointer]:
+          - /url: /about
+        - link "Services" [ref=e15] [cursor=pointer]:
+          - /url: /services
+        - link "Speaking" [ref=e16] [cursor=pointer]:
+          - /url: /speaking
+        - link "Consultations" [ref=e17] [cursor=pointer]:
+          - /url: /store
+        - link "Contact" [ref=e18] [cursor=pointer]:
+          - /url: /contact
+      - generic [ref=e19]:
+        - group "Shopping cart" [ref=e20]:
+          - link [ref=e21] [cursor=pointer]:
+            - /url: /cart
+            - img [ref=e22]
+        - generic [ref=e23]:
+          - button "Sign In" [ref=e24] [cursor=pointer]
+          - button "Sign Up" [ref=e25] [cursor=pointer]
+  - main [ref=e26]:
+    - generic [ref=e27]:
+      - generic [ref=e30]:
+        - link "Back to Home" [ref=e31] [cursor=pointer]:
+          - /url: /
+          - img [ref=e32]
+          - generic [ref=e33]: Back to Home
+        - heading "Book Your Consultation" [level=1] [ref=e34]
+        - paragraph [ref=e35]: Get expert marketing consultation to scale your business. Choose your package, select a time, and we'll be in touch.
+      - generic [ref=e39]:
+        - button "1 Step 1 Choose Package" [ref=e41] [cursor=pointer]:
+          - generic [ref=e43]: "1"
+          - generic [ref=e44]:
+            - generic [ref=e45]: Step 1
+            - generic [ref=e46]: Choose Package
+        - button "2 Step 2 Select Date" [disabled] [ref=e49]:
+          - generic [ref=e51]: "2"
+          - generic [ref=e52]:
+            - generic [ref=e53]: Step 2
+            - generic [ref=e54]: Select Date
+        - button "3 Step 3 Contact Information" [disabled] [ref=e57]:
+          - generic [ref=e59]: "3"
+          - generic [ref=e60]:
+            - generic [ref=e61]: Step 3
+            - generic [ref=e62]: Contact Information
+      - generic [ref=e65]:
+        - generic [ref=e66]:
+          - generic [ref=e69]:
+            - heading "Choose Your Consultation Package" [level=2] [ref=e70]
+            - paragraph [ref=e71]: Select the consultation package that best fits your needs and budget
+          - generic [ref=e72]:
+            - button "Next Step" [disabled]:
+              - text: Next Step
+              - img
+        - generic [ref=e75]:
+          - generic [ref=e76]:
+            - generic [ref=e77]: Booking Summary
+            - paragraph [ref=e78]: Review your consultation details
+          - generic [ref=e80]: Select a consultation package to continue
+          - generic [ref=e81]:
+            - button "Add to Cart" [disabled]:
+              - img
+              - text: Add to Cart
+            - paragraph [ref=e82]: Complete all steps to proceed
+  - contentinfo [ref=e83]:
+    - generic [ref=e86]:
+      - heading "Level Up Your Business" [level=3] [ref=e87]
+      - paragraph [ref=e88]: Get exclusive marketing insights, business tips, and updates on upcoming events.
+      - generic [ref=e89]:
+        - textbox "Enter your email" [ref=e90]
+        - button "Subscribe" [ref=e91] [cursor=pointer]:
+          - text: Subscribe
+          - img [ref=e92]
+    - generic [ref=e93]:
+      - generic [ref=e94]:
+        - generic [ref=e95]:
+          - generic [ref=e96]:
+            - generic [ref=e98]: Ay
+            - generic [ref=e99]: anda Mabaso
+          - paragraph [ref=e100]: Digital creator, marketing expert & speaker. Helping businesses generate millions in sales.
+          - generic [ref=e101]:
+            - link "Instagram" [ref=e102] [cursor=pointer]:
+              - /url: https://www.instagram.com/ayandamabaso_official/
+              - img [ref=e103]
+            - link "TikTok" [ref=e104] [cursor=pointer]:
+              - /url: https://www.tiktok.com/@ayanda.mabaso.marketing
+              - img [ref=e105]
+        - generic [ref=e107]:
+          - heading "Quick Links" [level=4] [ref=e108]
+          - list [ref=e109]:
+            - listitem [ref=e110]:
+              - link "Home" [ref=e111] [cursor=pointer]:
+                - /url: /
+            - listitem [ref=e112]:
+              - link "About" [ref=e113] [cursor=pointer]:
+                - /url: /about
+            - listitem [ref=e114]:
+              - link "Services" [ref=e115] [cursor=pointer]:
+                - /url: /services
+            - listitem [ref=e116]:
+              - link "Speaking" [ref=e117] [cursor=pointer]:
+                - /url: /speaking
+            - listitem [ref=e118]:
+              - link "Consultations" [ref=e119] [cursor=pointer]:
+                - /url: /store
+            - listitem [ref=e120]:
+              - link "Contact" [ref=e121] [cursor=pointer]:
+                - /url: /contact
+            - listitem [ref=e122]:
+              - link "My Account" [ref=e123] [cursor=pointer]:
+                - /url: /dashboard
+        - generic [ref=e124]:
+          - heading "Services" [level=4] [ref=e125]
+          - list [ref=e126]:
+            - listitem [ref=e127]:
+              - link "Marketing Consulting" [ref=e128] [cursor=pointer]:
+                - /url: /services
+            - listitem [ref=e129]:
+              - link "Keynote Speaking" [ref=e130] [cursor=pointer]:
+                - /url: /speaking
+            - listitem [ref=e131]:
+              - link "Business Strategy" [ref=e132] [cursor=pointer]:
+                - /url: /services
+            - listitem [ref=e133]:
+              - link "Consultations" [ref=e134] [cursor=pointer]:
+                - /url: /store
+        - generic [ref=e135]:
+          - heading "Contact" [level=4] [ref=e136]
+          - list [ref=e137]:
+            - listitem [ref=e138]:
+              - img [ref=e139]
+              - link "biz@mabasomedia.co.za" [ref=e140] [cursor=pointer]:
+                - /url: mailto:biz@mabasomedia.co.za
+            - listitem [ref=e141]:
+              - img [ref=e142]
+              - generic [ref=e143]: Durban, South Africa
+      - generic [ref=e144]:
+        - paragraph [ref=e145]: © 2026 Ayanda Mabaso. All rights reserved.
+        - paragraph [ref=e146]:
+          - text: Powered by
+          - link "Tredicik" [ref=e147] [cursor=pointer]:
+            - /url: https://tredicik.com
