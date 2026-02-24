@@ -1,7 +1,7 @@
 import { TredicikPortal } from '@tredicik/portal-sdk';
 
 export const portal = new TredicikPortal({
-  apiUrl: '/api/proxy',
+  apiUrl: import.meta.env.VITE_API_URL || 'https://api.tredicik.com/api/external/v1',
   apiKey: import.meta.env.VITE_API_KEY || 'pk_test_tenant_11',
   tenantId: Number(import.meta.env.VITE_TENANT_ID) || 11
 });

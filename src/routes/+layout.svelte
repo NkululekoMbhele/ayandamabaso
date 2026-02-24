@@ -302,7 +302,7 @@
 							>
 								<Avatar.Root class="h-9 w-9">
 									<Avatar.Fallback class="bg-primary text-white text-sm font-medium">
-										{authStore.user.firstName[0]}{authStore.user.lastName[0]}
+										{(authStore.user.firstName || authStore.user.email || '?')[0].toUpperCase()}{(authStore.user.lastName || '')[0]?.toUpperCase() || ''}
 									</Avatar.Fallback>
 								</Avatar.Root>
 							</button>

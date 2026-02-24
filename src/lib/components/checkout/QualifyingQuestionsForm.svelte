@@ -36,12 +36,22 @@
 		error = '';
 
 		try {
-			// Call API endpoint to submit qualifying questions
-			const response = await fetch(`/api/orders/${orderNumber}/qualifying-questions`, {
+			// Call the real backend API directly (server-side routes don't work in static hosting)
+			const apiUrl = import.meta.env.VITE_API_URL || 'https://api.tredicik.com/api/external/v1';
+			const apiKey = import.meta.env.VITE_API_KEY || '';
+			const token = typeof window !== 'undefined' ? localStorage.getItem('ayanda_token') : null;
+
+			const headers: Record<string, string> = {
+				'Content-Type': 'application/json',
+				'X-API-Key': apiKey
+			};
+			if (token) {
+				headers['Authorization'] = `Bearer ${token}`;
+			}
+
+			const response = await fetch(`${apiUrl}/orders/${orderNumber}/qualifying-questions`, {
 				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
+				headers,
 				body: JSON.stringify({
 					goals: formData.goals.trim(),
 					targets: formData.targets.trim(),

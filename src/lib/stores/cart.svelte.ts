@@ -1,8 +1,8 @@
 // Check if we're in browser
 const isBrowser = typeof window !== 'undefined';
 
-// API URL - use local proxy to bypass CORS
-const API_URL = '/api/proxy';
+// API URL - use the real backend API directly
+const API_URL = import.meta.env.VITE_API_URL || 'https://api.tredicik.com/api/external/v1';
 
 // Storage keys
 const CART_KEY = 'ayanda_cart';
@@ -158,8 +158,7 @@ async function loadCart() {
     isLoading = true;
     error = null;
 
-    // Use local proxy to bypass CORS issues
-    const response = await fetch(`${API_URL}?path=%2Fcart`, {
+    const response = await fetch(`${API_URL}/cart`, {
       method: 'GET',
       headers: getApiHeaders()
     });
@@ -240,7 +239,7 @@ export const cartStore = {
         extra_data: item.extraData
       };
 
-      const response = await fetch(`${API_URL}?path=%2Fcart%2Fitems`, {
+      const response = await fetch(`${API_URL}/cart/items`, {
         method: 'POST',
         headers: getApiHeaders(true),
         body: JSON.stringify(payload)
@@ -268,8 +267,7 @@ export const cartStore = {
     isLoading = true;
 
     try {
-      const encodedPath = encodeURIComponent(`/cart/items/${itemId}`);
-      const response = await fetch(`${API_URL}?path=${encodedPath}`, {
+      const response = await fetch(`${API_URL}/cart/items/${itemId}`, {
         method: 'PATCH',
         headers: getApiHeaders(true),
         body: JSON.stringify({ quantity })
@@ -297,8 +295,7 @@ export const cartStore = {
     isLoading = true;
 
     try {
-      const encodedPath = encodeURIComponent(`/cart/items/${itemId}`);
-      const response = await fetch(`${API_URL}?path=${encodedPath}`, {
+      const response = await fetch(`${API_URL}/cart/items/${itemId}`, {
         method: 'DELETE',
         headers: getApiHeaders()
       });
@@ -325,7 +322,7 @@ export const cartStore = {
     isLoading = true;
 
     try {
-      const response = await fetch(`${API_URL}?path=%2Fcart`, {
+      const response = await fetch(`${API_URL}/cart`, {
         method: 'DELETE',
         headers: getApiHeaders()
       });
@@ -352,10 +349,10 @@ export const cartStore = {
     isLoading = true;
 
     try {
-      const response = await fetch(`${API_URL}?path=%2Fcart%2Fpromo`, {
+      const response = await fetch(`${API_URL}/cart/promo-code`, {
         method: 'POST',
         headers: getApiHeaders(true),
-        body: JSON.stringify({ promo_code: code })
+        body: JSON.stringify({ code })
       });
 
       if (response.ok) {

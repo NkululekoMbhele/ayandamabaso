@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
+  import { browser } from '$app/environment';
   import { authStore } from '$lib/stores/auth.svelte';
   import { portal } from '$lib/portal';
   import type { Order } from '@tredicik/portal-sdk';
@@ -11,6 +11,7 @@
 
   let orders = $state<Order[]>([]);
   let isLoading = $state(true);
+  let dashboardLoaded = $state(false);
   let stats = $state({
     totalOrders: 0,
     totalSpent: 0,
@@ -18,11 +19,6 @@
   });
 
   async function loadDashboard() {
-    if (!authStore.isAuthenticated) {
-      goto('/');
-      return;
-    }
-
     isLoading = true;
 
     try {
@@ -59,10 +55,18 @@
     }
   }
 
-  onMount(() => {
+  // Client-side auth guard using $effect so it reacts to auth state changes.
+  // With adapter-static, server-side guards don't run; this ensures we only
+  // redirect after the auth store has finished loading from localStorage.
+  $effect(() => {
+    if (!browser) return;
+    // Wait until the auth store has finished initialising
+    if (authStore.isLoading) return;
+
     if (!authStore.isAuthenticated) {
       goto('/');
-    } else {
+    } else if (!dashboardLoaded) {
+      dashboardLoaded = true;
       loadDashboard();
     }
   });
@@ -79,7 +83,7 @@
       <h1 class="text-4xl font-bold text-foreground mb-2">Dashboard</h1>
       {#if authStore.user}
         <p class="text-lg text-muted-foreground">
-          Welcome back, {authStore.user.firstName}!
+          Welcome back, {authStore.user.firstName || authStore.user.email}!
         </p>
       {/if}
     </div>

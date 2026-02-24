@@ -42,13 +42,14 @@ class BookingStore {
 		this.error = null;
 
 		try {
-			// Fetch products/offerings via local proxy (bypasses CORS)
+			// Fetch products/offerings from the real API
 			const apiKey = import.meta.env.VITE_API_KEY || 'pk_live_tenant_41';
 			const tenantId = import.meta.env.VITE_TENANT_ID || '41';
 
-			// Try the proxy first, then fall back to hardcoded packages
+			const apiUrl = import.meta.env.VITE_API_URL || "https://api.tredicik.com/api/external/v1";
+			// Fetch directly from the real API
 			const response = await fetch(
-				`/api/proxy/products?inStock=true&sortBy=createdAt&sortOrder=desc&tenant_id=${tenantId}`,
+				`${apiUrl}/products?inStock=true&sortBy=createdAt&sortOrder=desc&tenant_id=${tenantId}`,
 				{
 					headers: {
 						'X-API-Key': apiKey,
@@ -344,7 +345,7 @@ class BookingStore {
 				offeringName: this.selectedOffering.name,
 				quantity: 1, // Consultations are always quantity 1
 				unitPrice: this.selectedOffering.price,
-				imageUrl: this.selectedOffering.image_url,
+				imageUrl: this.selectedOffering.image_url ?? undefined,
 				extraData: bookingMetadata
 			});
 

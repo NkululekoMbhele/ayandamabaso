@@ -2,11 +2,11 @@ export interface ConsultationOffering {
 	id: number;
 	name: string;
 	description: string;
-	package_type: 'discovery' | 'strategy' | 'vip';
+	package_type: 'discovery' | 'strategy' | 'vip' | 'standard' | 'group' | string;
 	duration_minutes: number;
 	price: number;
-	sale_price?: number;
-	image_url?: string;
+	sale_price?: number | null;
+	image_url?: string | null;
 	metadata: {
 		includes: string[];
 		buffer_minutes: number;
@@ -42,7 +42,7 @@ export interface GuestInfo {
 
 export interface BookingMetadata {
 	booking_date: string; // ISO date string
-	booking_time: string; // "09:00"
+	booking_time: string | null; // "09:00"
 	booking_duration: number; // minutes
 	booking_type: 'consultation';
 	package_type: string; // "discovery", "strategy", "vip"
