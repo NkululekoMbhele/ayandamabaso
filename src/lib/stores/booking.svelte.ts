@@ -47,7 +47,7 @@ class BookingStore {
 			const tenantId = import.meta.env.VITE_TENANT_ID || '41';
 
 			const response = await fetch(
-				`/api/proxy?path=/products?tenant_id=${tenantId}`,
+				`/api/proxy?path=%2Fproducts&tenant_id=${tenantId}`,
 				{
 					headers: {
 						'X-API-Key': apiKey,

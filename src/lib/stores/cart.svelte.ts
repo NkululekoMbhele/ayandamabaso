@@ -159,7 +159,8 @@ async function loadCart() {
     error = null;
 
     // Use local proxy to bypass CORS issues
-    const response = await fetch(`${API_URL}?path=/cart`, {
+    const response = await fetch(`${API_URL}?path=%2Fcart`, {
+      method: 'GET',
       headers: getApiHeaders()
     });
 
@@ -239,7 +240,7 @@ export const cartStore = {
         extra_data: item.extraData
       };
 
-      const response = await fetch(`${API_URL}?path=/cart/items`, {
+      const response = await fetch(`${API_URL}?path=%2Fcart%2Fitems`, {
         method: 'POST',
         headers: getApiHeaders(true),
         body: JSON.stringify(payload)
@@ -267,7 +268,8 @@ export const cartStore = {
     isLoading = true;
 
     try {
-      const response = await fetch(`${API_URL}?path=/cart/items/${itemId}`, {
+      const encodedPath = encodeURIComponent(`/cart/items/${itemId}`);
+      const response = await fetch(`${API_URL}?path=${encodedPath}`, {
         method: 'PATCH',
         headers: getApiHeaders(true),
         body: JSON.stringify({ quantity })
@@ -295,7 +297,8 @@ export const cartStore = {
     isLoading = true;
 
     try {
-      const response = await fetch(`${API_URL}?path=/cart/items/${itemId}`, {
+      const encodedPath = encodeURIComponent(`/cart/items/${itemId}`);
+      const response = await fetch(`${API_URL}?path=${encodedPath}`, {
         method: 'DELETE',
         headers: getApiHeaders()
       });
@@ -322,7 +325,7 @@ export const cartStore = {
     isLoading = true;
 
     try {
-      const response = await fetch(`${API_URL}/cart`, {
+      const response = await fetch(`${API_URL}?path=%2Fcart`, {
         method: 'DELETE',
         headers: getApiHeaders()
       });
@@ -349,7 +352,7 @@ export const cartStore = {
     isLoading = true;
 
     try {
-      const response = await fetch(`${API_URL}/cart/promo`, {
+      const response = await fetch(`${API_URL}?path=%2Fcart%2Fpromo`, {
         method: 'POST',
         headers: getApiHeaders(true),
         body: JSON.stringify({ promo_code: code })
