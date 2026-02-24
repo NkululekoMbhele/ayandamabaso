@@ -46,8 +46,9 @@ class BookingStore {
 			const apiKey = import.meta.env.VITE_API_KEY || 'pk_live_tenant_41';
 			const tenantId = import.meta.env.VITE_TENANT_ID || '41';
 
+			// Try the proxy first, then fall back to hardcoded packages
 			const response = await fetch(
-				`/api/proxy?path=%2Fproducts&tenant_id=${tenantId}`,
+				`/api/proxy/products?inStock=true&sortBy=createdAt&sortOrder=desc&tenant_id=${tenantId}`,
 				{
 					headers: {
 						'X-API-Key': apiKey,
@@ -58,13 +59,27 @@ class BookingStore {
 			);
 
 			if (!response.ok) {
+				console.warn('[BookingStore] API request failed:', response.status);
 				throw new Error(`API request failed with status ${response.status}`);
 			}
 
 			const data = await response.json();
-			const products = data.items || [];
+			console.log('[BookingStore] API Response:', data);
 
-			if (products.length === 0) {
+			// Handle different response structures
+			let products = [];
+			if (Array.isArray(data)) {
+				products = data;
+			} else if (data.items && Array.isArray(data.items)) {
+				products = data.items;
+			} else if (data.data && Array.isArray(data.data)) {
+				products = data.data;
+			} else if (data.results && Array.isArray(data.results)) {
+				products = data.results;
+			}
+
+			if (!products || !Array.isArray(products) || products.length === 0) {
+				console.warn('[BookingStore] No products in expected format, using fallback. Response:', data);
 				throw new Error('No products returned from API');
 			}
 
