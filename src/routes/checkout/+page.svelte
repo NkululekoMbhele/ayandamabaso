@@ -65,10 +65,9 @@
     return true;
   }
 
-  // Helper to make API calls with proper session/auth headers
+  // Helper to make API calls with proper session/auth headers through proxy
   async function apiPost(url: string, data: any) {
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080/api/external/v1';
-    const apiKey = import.meta.env.VITE_API_KEY || 'pk_test_tenant_11';
+    const apiKey = import.meta.env.VITE_API_KEY || 'pk_live_tenant_41';
 
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
@@ -87,7 +86,8 @@
       headers['X-Session-Id'] = sessionId;
     }
 
-    const response = await fetch(`${apiUrl}${url}`, {
+    // Use local proxy to bypass CORS
+    const response = await fetch(`/api/proxy${url}`, {
       method: 'POST',
       headers,
       body: JSON.stringify(data)

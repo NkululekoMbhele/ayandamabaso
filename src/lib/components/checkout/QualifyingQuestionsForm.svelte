@@ -36,9 +36,8 @@
 		error = '';
 
 		try {
-			// Call the real backend API directly (server-side routes don't work in static hosting)
-			const apiUrl = import.meta.env.VITE_API_URL || 'https://api.tredicik.com/api/external/v1';
-			const apiKey = import.meta.env.VITE_API_KEY || '';
+			// Call through local proxy to bypass CORS
+			const apiKey = import.meta.env.VITE_API_KEY || 'pk_live_tenant_41';
 			const token = typeof window !== 'undefined' ? localStorage.getItem('ayanda_token') : null;
 
 			const headers: Record<string, string> = {
@@ -49,7 +48,7 @@
 				headers['Authorization'] = `Bearer ${token}`;
 			}
 
-			const response = await fetch(`${apiUrl}/orders/${orderNumber}/qualifying-questions`, {
+			const response = await fetch(`/api/proxy/orders/${orderNumber}/qualifying-questions`, {
 				method: 'POST',
 				headers,
 				body: JSON.stringify({
