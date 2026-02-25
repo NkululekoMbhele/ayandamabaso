@@ -42,13 +42,13 @@ class BookingStore {
 		this.error = null;
 
 		try {
-			// Fetch products/offerings via local proxy to bypass CORS
+			// Fetch products/offerings from backend API (CORS now configured)
 			const apiKey = import.meta.env.VITE_API_KEY || 'pk_live_tenant_41';
-			const tenantId = import.meta.env.VITE_TENANT_ID || '41';
+			const apiUrl = import.meta.env.VITE_API_URL || 'https://api.tredicik.com/api/external/v1';
 
-			// Use local proxy instead of direct API to bypass CORS
+			// Use direct API URL - CORS is now configured on backend
 			const response = await fetch(
-				`/api/proxy/products?inStock=true&sortBy=createdAt&sortOrder=desc&tenant_id=${tenantId}`,
+				`${apiUrl}/products?inStock=true&sortBy=createdAt&sortOrder=desc`,
 				{
 					headers: {
 						'X-API-Key': apiKey,

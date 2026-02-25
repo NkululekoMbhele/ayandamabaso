@@ -1,8 +1,8 @@
 // Check if we're in browser
 const isBrowser = typeof window !== 'undefined';
 
-// API URL - use local proxy to bypass CORS
-const API_URL = '/api/proxy';
+// API URL - direct backend now that CORS is configured
+const API_URL = import.meta.env.VITE_API_URL || 'https://api.tredicik.com/api/external/v1';
 
 // Storage keys
 const CART_KEY = 'ayanda_cart';

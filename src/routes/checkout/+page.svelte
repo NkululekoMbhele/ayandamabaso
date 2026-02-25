@@ -65,9 +65,10 @@
     return true;
   }
 
-  // Helper to make API calls with proper session/auth headers through proxy
+  // Helper to make API calls with proper session/auth headers
   async function apiPost(url: string, data: any) {
     const apiKey = import.meta.env.VITE_API_KEY || 'pk_live_tenant_41';
+    const apiUrl = import.meta.env.VITE_API_URL || 'https://api.tredicik.com/api/external/v1';
 
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
@@ -86,8 +87,8 @@
       headers['X-Session-Id'] = sessionId;
     }
 
-    // Use local proxy to bypass CORS
-    const response = await fetch(`/api/proxy${url}`, {
+    // Use direct API URL - CORS is now configured on backend
+    const response = await fetch(`${apiUrl}${url}`, {
       method: 'POST',
       headers,
       body: JSON.stringify(data)
