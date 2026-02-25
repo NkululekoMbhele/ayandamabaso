@@ -1,8 +1,8 @@
 // Check if we're in browser
 const isBrowser = typeof window !== 'undefined';
 
-// API URL - use the real backend API directly
-const API_URL = import.meta.env.VITE_API_URL || 'https://api.tredicik.com/api/external/v1';
+// API URL - use local proxy to bypass CORS
+const API_URL = '/api/proxy';
 
 // Storage keys
 const CART_KEY = 'ayanda_cart';
@@ -36,7 +36,7 @@ function storeCartSession(cartData: any) {
 // Get common headers for API requests
 function getApiHeaders(includeContentType = false): Record<string, string> {
   const headers: Record<string, string> = {
-    'X-API-Key': import.meta.env.VITE_API_KEY
+    'X-API-Key': import.meta.env.VITE_API_KEY || 'pk_live_tenant_41'
   };
 
   if (includeContentType) {
