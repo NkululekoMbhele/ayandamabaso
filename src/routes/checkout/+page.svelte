@@ -30,15 +30,22 @@
   let paymentForm: HTMLFormElement | null = $state(null);
   let paymentFormData = $state<{ action: string; fields: Record<string, string> } | null>(null);
 
-  // Check if cart has only digital products
+  // Check if cart has only digital/service products (no physical delivery needed)
   const isDigitalOnly = $derived(
-    cartStore.cart?.items?.every((item: { offeringName?: string }) =>
+    cartStore.cart?.items?.every((item: { offeringName?: string; isDigital?: boolean }) =>
+      item.isDigital === true ||
+      item.offeringName?.toLowerCase().includes('consultation') ||
+      item.offeringName?.toLowerCase().includes('session') ||
+      item.offeringName?.toLowerCase().includes('coaching') ||
       item.offeringName?.toLowerCase().includes('ebook') ||
       item.offeringName?.toLowerCase().includes('e-book') ||
       item.offeringName?.toLowerCase().includes('digital') ||
       item.offeringName?.toLowerCase().includes('workbook') ||
       item.offeringName?.toLowerCase().includes('blueprint') ||
-      item.offeringName?.toLowerCase().includes('guide')
+      item.offeringName?.toLowerCase().includes('guide') ||
+      item.offeringName?.toLowerCase().includes('masterclass') ||
+      item.offeringName?.toLowerCase().includes('course') ||
+      item.offeringName?.toLowerCase().includes('workshop')
     ) ?? false
   );
 
