@@ -20,6 +20,17 @@
   let email = $state(authStore.user?.email || '');
   let phone = $state(authStore.user?.phoneNumber || '');
 
+  // Sync form fields from auth store after client-side hydration
+  // (SSR renders with empty values since localStorage isn't available server-side)
+  $effect(() => {
+    if (authStore.user) {
+      if (!firstName) firstName = (authStore.user as any).firstName || (authStore.user as any).first_name || '';
+      if (!lastName) lastName = (authStore.user as any).lastName || (authStore.user as any).last_name || '';
+      if (!email) email = authStore.user.email || '';
+      if (!phone) phone = (authStore.user as any).phoneNumber || (authStore.user as any).phone_number || '';
+    }
+  });
+
   // Shipping address (for physical products)
   let streetAddress = $state('');
   let city = $state('');
