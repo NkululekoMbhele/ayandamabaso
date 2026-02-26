@@ -61,17 +61,12 @@
   }
 
   function filterProducts() {
-    let filtered = allProducts.filter((p) => {
-      const categoryName = p.category?.name?.toLowerCase() || '';
-      return categoryName.includes('consultation');
-    });
-
     if (!selectedCategory) {
-      products = filtered;
+      products = allProducts;
     } else {
       const categoryFilter = selectedCategory;
-      products = filtered.filter((p) => {
-        const categoryName = p.category?.name?.toLowerCase() || '';
+      products = allProducts.filter((p) => {
+        const categoryName = p.category?.name?.toLowerCase() || p.name?.toLowerCase() || '';
         return categoryName.includes(categoryFilter.toLowerCase());
       });
     }
