@@ -248,6 +248,7 @@
 								guestInfo={guestInfo}
 								onChange={handleGuestInfoChange}
 								isAuthenticated={authStore.isAuthenticated}
+								offering={bookingStore.selectedOffering}
 							/>
 						</div>
 					{/if}

@@ -86,24 +86,27 @@ class BookingStore {
 			}
 
 			// Filter and map to consultation offerings
-			// Look for offerings with metadata indicating they're consultations
+			// Filter by name since API products may not have an offering_type field
 			const consultationOfferings = products
 				.filter((product: any) => {
 					return (
-						product.offering_type === 'service' &&
-						(product.name?.toLowerCase().includes('consultation') ||
-							product.name?.toLowerCase().includes('session'))
+						product.name?.toLowerCase().includes('consultation') ||
+						product.name?.toLowerCase().includes('session') ||
+						product.name?.toLowerCase().includes('deep dive') ||
+						product.name?.toLowerCase().includes('teaching')
 					);
 				})
 				.map((product: any) => {
 					const metadata = product.metadata || product.custom_metadata || {};
+					// Resolve price from nested or flat structure
+					const price = product.price?.base_price ?? product.base_price ?? product.price;
 					return {
 						id: product.id,
 						name: product.name,
 						description: product.description || '',
 						package_type: metadata.package_type || 'discovery',
 						duration_minutes: metadata.duration_minutes || 30,
-						price: product.base_price || product.price,
+						price,
 						sale_price: product.sale_price,
 						image_url: product.image_url,
 						metadata: {
@@ -113,7 +116,9 @@ class BookingStore {
 								metadata.advance_booking_days || tenantConfig.consultations?.advanceBookingDays || 1,
 							max_booking_days:
 								metadata.max_booking_days || tenantConfig.consultations?.maxBookingDays || 90,
-							popular: metadata.popular || false
+							popular: metadata.popular || false,
+							supports_in_person: metadata.supports_in_person || false,
+							in_person_location: metadata.in_person_location
 						}
 					};
 				});
@@ -140,7 +145,7 @@ class BookingStore {
 					image_url: null,
 					metadata: {
 						includes: [
-							'One-on-one session',
+							'One-on-one virtual session',
 							'Strategic guidance',
 							'Actionable insights',
 							'Post-session summary'
@@ -148,7 +153,8 @@ class BookingStore {
 						buffer_minutes: 15,
 						advance_booking_days: 1,
 						max_booking_days: 90,
-						popular: false
+						popular: false,
+						supports_in_person: false
 					}
 				},
 				{
@@ -162,7 +168,7 @@ class BookingStore {
 					image_url: null,
 					metadata: {
 						includes: [
-							'Extended one-on-one session',
+							'Extended virtual one-on-one session',
 							'Deep strategy development',
 							'Comprehensive business audit',
 							'Detailed action plan',
@@ -171,13 +177,14 @@ class BookingStore {
 						buffer_minutes: 15,
 						advance_booking_days: 1,
 						max_booking_days: 90,
-						popular: true
+						popular: true,
+						supports_in_person: false
 					}
 				},
 				{
 					id: 3,
 					name: 'Live Group Session Teaching',
-					description: 'Interactive training for corporate teams',
+					description: 'Interactive training for corporate teams — virtual or in-person around Durban',
 					package_type: 'group',
 					duration_minutes: 120,
 					price: 15000,
@@ -191,12 +198,15 @@ class BookingStore {
 							'Social media strategy',
 							'Marketing best practices',
 							'Q&A session',
-							'Course materials included'
+							'Course materials included',
+							'Virtual or in-person (Durban area)'
 						],
 						buffer_minutes: 30,
 						advance_booking_days: 1,
 						max_booking_days: 90,
-						popular: false
+						popular: false,
+						supports_in_person: true,
+						in_person_location: 'Durban, KwaZulu-Natal'
 					}
 				}
 			];

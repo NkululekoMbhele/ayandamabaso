@@ -1,18 +1,22 @@
 <script lang="ts">
-	import type { GuestInfo } from '$lib/types/booking';
+	import type { GuestInfo, ConsultationOffering } from '$lib/types/booking';
 	import { Input } from '$lib/components/ui/input';
 	import { Label } from '$lib/components/ui/label';
 	import { Textarea } from '$lib/components/ui/textarea';
 	import * as RadioGroup from '$lib/components/ui/radio-group';
-	import { User, Mail, Phone, MessageSquare, Clock, MapPin } from 'lucide-svelte';
+	import { User, Mail, Phone, MessageSquare, Clock, MapPin, Info } from 'lucide-svelte';
 
 	interface Props {
 		guestInfo: GuestInfo;
 		onChange: (info: GuestInfo) => void;
 		isAuthenticated: boolean;
+		offering?: ConsultationOffering | null;
 	}
 
-	let { guestInfo, onChange, isAuthenticated }: Props = $props();
+	let { guestInfo, onChange, isAuthenticated, offering = null }: Props = $props();
+
+	const supportsInPerson = $derived(offering?.metadata?.supports_in_person === true);
+	const inPersonLocation = $derived(offering?.metadata?.in_person_location || 'Durban, KwaZulu-Natal');
 
 	function handleInput(field: keyof GuestInfo, value: string) {
 		onChange({
@@ -138,49 +142,39 @@
 			</p>
 		</div>
 
-		<!-- Meeting Type -->
-		<div class="space-y-3 mt-6">
-			<Label class="flex items-center gap-2">
-				<MapPin class="w-4 h-4 text-muted-foreground" />
-				<span>Preferred Meeting Type</span>
-				<span class="text-muted-foreground text-sm">(Optional)</span>
-			</Label>
-			<RadioGroup.Root
-				value={guestInfo.meetingType || 'both'}
-				onValueChange={(value) => handleInput('meetingType', value as any)}
-			>
-				<div class="flex items-center space-x-2">
-					<RadioGroup.Item value="virtual" id="virtual" />
-					<Label for="virtual" class="font-normal cursor-pointer">Virtual (Zoom/Teams)</Label>
-				</div>
-				<div class="flex items-center space-x-2">
-					<RadioGroup.Item value="in-person" id="in-person" />
-					<Label for="in-person" class="font-normal cursor-pointer">In-Person</Label>
-				</div>
-				<div class="flex items-center space-x-2">
-					<RadioGroup.Item value="both" id="both" />
-					<Label for="both" class="font-normal cursor-pointer">Either (Flexible)</Label>
-				</div>
-			</RadioGroup.Root>
-		</div>
-
-		<!-- Preferred Location (if in-person selected) -->
-		{#if guestInfo.meetingType === 'in-person' || guestInfo.meetingType === 'both' || !guestInfo.meetingType}
-			<div class="space-y-2 mt-6">
-				<Label for="preferredLocation" class="flex items-center gap-2">
+		<!-- Meeting Type — only shown for packages that support in-person (R15k group package) -->
+		{#if supportsInPerson}
+			<div class="space-y-3 mt-6">
+				<Label class="flex items-center gap-2">
 					<MapPin class="w-4 h-4 text-muted-foreground" />
-					<span>Preferred Location</span>
-					<span class="text-muted-foreground text-sm">(Optional)</span>
+					<span>Session Format</span>
+					<span class="text-destructive">*</span>
 				</Label>
-				<Textarea
-					id="preferredLocation"
-					name="preferredLocation"
-					placeholder="e.g., Johannesburg CBD, Home, Coffee shop, or your office address"
-					value={guestInfo.preferredLocation || ''}
-					oninput={(e) => handleInput('preferredLocation', e.currentTarget.value)}
-					rows={2}
-					class="resize-none"
-				/>
+				<RadioGroup.Root
+					value={guestInfo.meetingType || 'virtual'}
+					onValueChange={(value) => handleInput('meetingType', value as any)}
+				>
+					<div class="flex items-center space-x-2">
+						<RadioGroup.Item value="virtual" id="virtual" />
+						<Label for="virtual" class="font-normal cursor-pointer">Virtual (Zoom/Teams)</Label>
+					</div>
+					<div class="flex items-center space-x-2">
+						<RadioGroup.Item value="in-person" id="in-person" />
+						<Label for="in-person" class="font-normal cursor-pointer">
+							In-Person <span class="text-muted-foreground text-sm">(Durban area only)</span>
+						</Label>
+					</div>
+				</RadioGroup.Root>
+
+				{#if guestInfo.meetingType === 'in-person'}
+					<div class="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-2">
+						<Info class="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+						<p class="text-sm text-amber-800">
+							In-person sessions are available within the <strong>{inPersonLocation}</strong> area.
+							We'll confirm the exact venue when we contact you to finalise the booking.
+						</p>
+					</div>
+				{/if}
 			</div>
 		{/if}
 

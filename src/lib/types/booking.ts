@@ -13,6 +13,8 @@ export interface ConsultationOffering {
 		advance_booking_days: number;
 		max_booking_days: number;
 		popular?: boolean;
+		supports_in_person?: boolean;
+		in_person_location?: string; // e.g. "Durban, KwaZulu-Natal"
 	};
 }
 
