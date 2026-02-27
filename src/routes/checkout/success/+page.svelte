@@ -1,15 +1,22 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
   import * as Card from '$lib/components/ui/card';
   import { Button } from '$lib/components/ui/button';
   import { CheckCircle, Package, Mail, ArrowRight, Download } from 'lucide-svelte';
   import QualifyingQuestionsForm from '$lib/components/checkout/QualifyingQuestionsForm.svelte';
+  import { cartStore } from '$lib/stores/cart.svelte';
 
   // Get order number from URL
   const orderNumber = $derived($page.url.searchParams.get('order') || '');
 
   let questionsCompleted = $state(false);
+
+  // Clear cart after successful payment
+  onMount(() => {
+    cartStore.reset();
+  });
 
   function handleQuestionsComplete() {
     questionsCompleted = true;

@@ -70,6 +70,8 @@ class BookingStore {
 			let products = [];
 			if (Array.isArray(data)) {
 				products = data;
+			} else if (data.products && Array.isArray(data.products)) {
+				products = data.products;
 			} else if (data.items && Array.isArray(data.items)) {
 				products = data.items;
 			} else if (data.data && Array.isArray(data.data)) {
@@ -85,7 +87,7 @@ class BookingStore {
 
 			// Filter and map to consultation offerings
 			// Look for offerings with metadata indicating they're consultations
-			this.offerings = products
+			const consultationOfferings = products
 				.filter((product: any) => {
 					return (
 						product.offering_type === 'service' &&
@@ -116,6 +118,12 @@ class BookingStore {
 					};
 				});
 
+			if (consultationOfferings.length === 0) {
+				console.warn('[BookingStore] API returned products but none are consultation services, using fallback');
+				throw new Error('No consultation offerings found in API products');
+			}
+
+			this.offerings = consultationOfferings;
 			console.log(`Loaded ${this.offerings.length} consultation offerings from API`);
 		} catch (err: any) {
 			// Fallback to hardcoded packages if API fails

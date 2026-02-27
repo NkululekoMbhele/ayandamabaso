@@ -20,7 +20,10 @@
 		Truck,
 		Search,
 		Filter,
-		RefreshCw
+		RefreshCw,
+		ClipboardList,
+		AlertCircle,
+		CheckCircle2
 	} from 'lucide-svelte';
 
 	interface OrderItem {
@@ -32,6 +35,14 @@
 		total: number;
 		imageUrl?: string;
 		isDigital?: boolean;
+	}
+
+	interface QualifyingAnswers {
+		goals: string;
+		targets: string;
+		business_nature: string;
+		struggles: string;
+		submitted_at?: string;
 	}
 
 	interface Order {
@@ -49,6 +60,7 @@
 		fulfillmentType?: string;
 		trackingNumber?: string;
 		trackingUrl?: string;
+		qualifyingAnswers?: QualifyingAnswers | null;
 	}
 
 	// State
@@ -62,6 +74,10 @@
 	let statusFilter = $state<string>('all');
 	let selectedOrder = $state<Order | null>(null);
 	let showOrderDetail = $state(false);
+	let showConsultationForm = $state(false);
+	let consultationFormData = $state({ goals: '', targets: '', businessNature: '', struggles: '' });
+	let consultationSubmitting = $state(false);
+	let consultationError = $state('');
 
 	const statusOptions = [
 		{ value: 'all', label: 'All Orders' },
@@ -114,7 +130,8 @@
 				trackingNumber: o.tracking_number || o.trackingNumber,
 				trackingUrl: o.tracking_url || o.trackingUrl,
 				shippingAddress: o.shipping_address || o.shippingAddress,
-				digitalDelivery: o.digital_delivery || o.digitalDelivery
+				digitalDelivery: o.digital_delivery || o.digitalDelivery,
+				qualifyingAnswers: o.qualifying_answers || o.qualifyingAnswers || null
 			})) as Order[];
 			totalOrders = response.total || orders.length;
 			totalPages = Math.ceil(totalOrders / perPage);
@@ -148,6 +165,72 @@
 	function closeOrderDetail() {
 		showOrderDetail = false;
 		selectedOrder = null;
+		showConsultationForm = false;
+		consultationFormData = { goals: '', targets: '', businessNature: '', struggles: '' };
+		consultationError = '';
+	}
+
+	async function submitConsultation(e: Event) {
+		e.preventDefault();
+		if (!selectedOrder) return;
+
+		const { goals, targets, businessNature, struggles } = consultationFormData;
+		if (!goals.trim() || !targets.trim() || !businessNature.trim() || !struggles.trim()) {
+			consultationError = 'Please answer all questions';
+			return;
+		}
+
+		consultationSubmitting = true;
+		consultationError = '';
+
+		try {
+			const apiKey = import.meta.env.VITE_API_KEY || 'pk_live_tenant_41';
+			const apiUrl = import.meta.env.VITE_API_URL || 'https://api.tredicik.com/api/external/v1';
+			const token = typeof window !== 'undefined' ? localStorage.getItem('ayanda_token') : null;
+
+			const headers: Record<string, string> = {
+				'Content-Type': 'application/json',
+				'X-API-Key': apiKey
+			};
+			if (token) headers['Authorization'] = `Bearer ${token}`;
+
+			const response = await fetch(
+				`${apiUrl}/orders/${selectedOrder.orderNumber}/qualifying-questions`,
+				{
+					method: 'POST',
+					headers,
+					body: JSON.stringify({
+						goals: goals.trim(),
+						targets: targets.trim(),
+						business_nature: businessNature.trim(),
+						struggles: struggles.trim()
+					})
+				}
+			);
+
+			if (!response.ok) throw new Error('Failed to submit');
+
+			// Update local state so the modal reflects the new answers
+			selectedOrder = {
+				...selectedOrder,
+				qualifyingAnswers: {
+					goals: goals.trim(),
+					targets: targets.trim(),
+					business_nature: businessNature.trim(),
+					struggles: struggles.trim(),
+					submitted_at: new Date().toISOString()
+				}
+			};
+			// Also update in the orders list
+			orders = orders.map((o) =>
+				o.id === selectedOrder!.id ? { ...o, qualifyingAnswers: selectedOrder!.qualifyingAnswers } : o
+			);
+			showConsultationForm = false;
+		} catch (err: any) {
+			consultationError = err.message || 'Failed to submit. Please try again.';
+		} finally {
+			consultationSubmitting = false;
+		}
 	}
 
 	function getStatusColor(status: string): string {
@@ -340,6 +423,19 @@
 													+{order.items.length - 3} more
 												</span>
 											{/if}
+										</div>
+									{/if}
+
+									<!-- Consultation status indicator -->
+									{#if order.status === 'paid' && !order.qualifyingAnswers}
+										<div class="mt-3 flex items-center gap-2 text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded px-2 py-1.5 w-fit">
+											<AlertCircle class="h-3.5 w-3.5 shrink-0" />
+											Consultation details needed — click View to complete
+										</div>
+									{:else if order.qualifyingAnswers}
+										<div class="mt-3 flex items-center gap-2 text-xs text-green-700 bg-green-50 border border-green-200 rounded px-2 py-1.5 w-fit">
+											<CheckCircle2 class="h-3.5 w-3.5 shrink-0" />
+											Consultation details submitted
 										</div>
 									{/if}
 								</div>
@@ -556,6 +652,145 @@
 						<span class="text-primary">{formatPrice(selectedOrder.total)}</span>
 					</div>
 				</div>
+
+				<!-- Consultation Details -->
+				{#if selectedOrder.qualifyingAnswers && !showConsultationForm}
+					<div class="border-t pt-4">
+						<h3 class="font-semibold text-foreground mb-3 flex items-center gap-2">
+							<ClipboardList class="h-4 w-4 text-primary" />
+							Consultation Details
+						</h3>
+						<div class="space-y-4 bg-gray-50 rounded-lg p-4">
+							<div>
+								<p class="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">Goals</p>
+								<p class="text-sm text-foreground">{selectedOrder.qualifyingAnswers.goals}</p>
+							</div>
+							<div>
+								<p class="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">Target Audience</p>
+								<p class="text-sm text-foreground">{selectedOrder.qualifyingAnswers.targets}</p>
+							</div>
+							<div>
+								<p class="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">Nature of Business</p>
+								<p class="text-sm text-foreground">{selectedOrder.qualifyingAnswers.business_nature}</p>
+							</div>
+							<div>
+								<p class="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1">Challenges</p>
+								<p class="text-sm text-foreground">{selectedOrder.qualifyingAnswers.struggles}</p>
+							</div>
+							{#if selectedOrder.qualifyingAnswers.submitted_at}
+								<p class="text-xs text-muted-foreground pt-2 border-t">
+									Submitted {new Date(selectedOrder.qualifyingAnswers.submitted_at).toLocaleDateString('en-ZA', { year: 'numeric', month: 'short', day: 'numeric' })}
+								</p>
+							{/if}
+						</div>
+					</div>
+				{:else if selectedOrder.status === 'paid' && !selectedOrder.qualifyingAnswers && !showConsultationForm}
+					<!-- CTA to complete consultation details -->
+					<div class="border-t pt-4">
+						<div class="bg-amber-50 border border-amber-200 rounded-lg p-4">
+							<div class="flex items-start gap-3">
+								<AlertCircle class="h-5 w-5 text-amber-600 mt-0.5 shrink-0" />
+								<div class="flex-1">
+									<h4 class="font-semibold text-amber-900 mb-1">Complete Your Consultation Details</h4>
+									<p class="text-sm text-amber-800 mb-3">
+										Help us prepare for your consultation by answering a few quick questions about your goals and business.
+									</p>
+									<Button
+										size="sm"
+										class="bg-amber-600 hover:bg-amber-700 text-white"
+										onclick={() => { showConsultationForm = true; }}
+									>
+										<ClipboardList class="h-4 w-4 mr-2" />
+										Complete Now
+									</Button>
+								</div>
+							</div>
+						</div>
+					</div>
+				{:else if showConsultationForm}
+					<!-- Inline consultation form -->
+					<div class="border-t pt-4">
+						<h3 class="font-semibold text-foreground mb-4 flex items-center gap-2">
+							<ClipboardList class="h-4 w-4 text-primary" />
+							Consultation Details
+						</h3>
+						<form onsubmit={submitConsultation} class="space-y-4">
+							{#if consultationError}
+								<div class="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+									<AlertCircle class="h-4 w-4 text-red-600 mt-0.5 shrink-0" />
+									<p class="text-sm text-red-700">{consultationError}</p>
+								</div>
+							{/if}
+							<div class="space-y-1">
+								<label class="text-sm font-medium text-foreground" for="modal-goals">What are you hoping to achieve?</label>
+								<textarea
+									id="modal-goals"
+									bind:value={consultationFormData.goals}
+									placeholder="E.g., Increase online sales, build brand awareness..."
+									class="w-full min-h-20 px-3 py-2 text-sm border rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-primary"
+									disabled={consultationSubmitting}
+									required
+								></textarea>
+							</div>
+							<div class="space-y-1">
+								<label class="text-sm font-medium text-foreground" for="modal-targets">Who is your target audience?</label>
+								<textarea
+									id="modal-targets"
+									bind:value={consultationFormData.targets}
+									placeholder="E.g., Small business owners aged 25-45..."
+									class="w-full min-h-20 px-3 py-2 text-sm border rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-primary"
+									disabled={consultationSubmitting}
+									required
+								></textarea>
+							</div>
+							<div class="space-y-1">
+								<label class="text-sm font-medium text-foreground" for="modal-business">Nature of your business?</label>
+								<textarea
+									id="modal-business"
+									bind:value={consultationFormData.businessNature}
+									placeholder="E.g., E-commerce fashion, digital marketing agency..."
+									class="w-full min-h-20 px-3 py-2 text-sm border rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-primary"
+									disabled={consultationSubmitting}
+									required
+								></textarea>
+							</div>
+							<div class="space-y-1">
+								<label class="text-sm font-medium text-foreground" for="modal-struggles">What challenges are you facing?</label>
+								<textarea
+									id="modal-struggles"
+									bind:value={consultationFormData.struggles}
+									placeholder="E.g., Low social media engagement, difficulty converting leads..."
+									class="w-full min-h-20 px-3 py-2 text-sm border rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-primary"
+									disabled={consultationSubmitting}
+									required
+								></textarea>
+							</div>
+							<div class="flex gap-3">
+								<Button
+									type="button"
+									variant="outline"
+									class="flex-1"
+									disabled={consultationSubmitting}
+									onclick={() => { showConsultationForm = false; consultationError = ''; }}
+								>
+									Cancel
+								</Button>
+								<Button
+									type="submit"
+									class="flex-1 bg-primary hover:bg-primary/90"
+									disabled={consultationSubmitting}
+								>
+									{#if consultationSubmitting}
+										<Loader2 class="h-4 w-4 mr-2 animate-spin" />
+										Submitting...
+									{:else}
+										Submit
+									{/if}
+								</Button>
+							</div>
+						</form>
+					</div>
+				{/if}
 
 				<!-- Actions -->
 				<div class="flex gap-3">

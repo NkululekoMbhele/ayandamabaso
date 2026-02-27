@@ -376,5 +376,17 @@ export const cartStore = {
 
   clearError() {
     error = null;
+  },
+
+  /**
+   * Reset cart state locally without an API call.
+   * Use this after a successful payment to clear the cart immediately.
+   */
+  reset() {
+    cart = null;
+    clearStorage();
+    if (isBrowser) {
+      localStorage.removeItem(SESSION_KEY + '_cart_id');
+    }
   }
 };
