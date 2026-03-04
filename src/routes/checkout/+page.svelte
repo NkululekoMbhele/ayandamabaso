@@ -43,10 +43,12 @@
 
   // Check if cart has only digital/service products (no physical delivery needed)
   const isDigitalOnly = $derived(
-    cartStore.cart?.items?.every((item: { offeringName?: string; isDigital?: boolean }) =>
+    cartStore.cart?.items?.every((item: { offeringName?: string; isDigital?: boolean; extraData?: any }) =>
       item.isDigital === true ||
+      item.extraData?.booking_type === 'consultation' ||
       item.offeringName?.toLowerCase().includes('consultation') ||
       item.offeringName?.toLowerCase().includes('session') ||
+      item.offeringName?.toLowerCase().includes('deep dive') ||
       item.offeringName?.toLowerCase().includes('coaching') ||
       item.offeringName?.toLowerCase().includes('ebook') ||
       item.offeringName?.toLowerCase().includes('e-book') ||
@@ -57,7 +59,7 @@
       item.offeringName?.toLowerCase().includes('masterclass') ||
       item.offeringName?.toLowerCase().includes('course') ||
       item.offeringName?.toLowerCase().includes('workshop')
-    ) ?? false
+    ) ?? true
   );
 
   // Fulfillment type based on cart contents
@@ -90,7 +92,8 @@
 
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
-      'X-API-Key': apiKey
+      'X-API-Key': apiKey,
+      'X-Tenant-ID': import.meta.env.VITE_TENANT_ID || '41'
     };
 
     // Add auth token if available (use correct key from our auth store)

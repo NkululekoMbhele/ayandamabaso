@@ -36,7 +36,8 @@ function storeCartSession(cartData: any) {
 // Get common headers for API requests
 function getApiHeaders(includeContentType = false): Record<string, string> {
   const headers: Record<string, string> = {
-    'X-API-Key': import.meta.env.VITE_API_KEY || 'pk_live_tenant_41'
+    'X-API-Key': import.meta.env.VITE_API_KEY || 'pk_live_tenant_41',
+    'X-Tenant-ID': import.meta.env.VITE_TENANT_ID || '41'
   };
 
   if (includeContentType) {
@@ -268,7 +269,7 @@ export const cartStore = {
 
     try {
       const response = await fetch(`${API_URL}/cart/items/${itemId}`, {
-        method: 'PATCH',
+        method: 'PUT',
         headers: getApiHeaders(true),
         body: JSON.stringify({ quantity })
       });

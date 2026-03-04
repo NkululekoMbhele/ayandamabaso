@@ -100,12 +100,49 @@ class BookingStore {
 					const metadata = product.metadata || product.custom_metadata || {};
 					// Resolve price from nested or flat structure
 					const price = product.price?.base_price ?? product.base_price ?? product.price;
+
+					// Infer metadata from product name when API metadata fields are missing/defaulted
+					const nameLower = product.name?.toLowerCase() || '';
+					let packageType = metadata.package_type;
+					let durationMinutes = metadata.duration_minutes;
+					let supportsInPerson = metadata.supports_in_person;
+
+					// Infer package_type from name if not set or using generic default
+					if (!packageType || packageType === 'discovery') {
+						if (nameLower.includes('group') || nameLower.includes('teaching')) {
+							packageType = 'group';
+						} else if (nameLower.includes('deep dive') || nameLower.includes('2 hour')) {
+							packageType = 'strategy';
+						} else if (nameLower.includes('consultation') || nameLower.includes('1 hour')) {
+							packageType = 'standard';
+						} else {
+							packageType = 'discovery';
+						}
+					}
+
+					// Infer duration_minutes from name if missing or at the 30-min default
+					if (!durationMinutes || durationMinutes === 30) {
+						if (nameLower.includes('2 hour') || nameLower.includes('deep dive') ||
+							nameLower.includes('teaching') || nameLower.includes('group')) {
+							durationMinutes = 120;
+						} else if (nameLower.includes('1 hour') || nameLower.includes('consultation')) {
+							durationMinutes = 60;
+						} else {
+							durationMinutes = durationMinutes || 60;
+						}
+					}
+
+					// Infer supports_in_person from name if not explicitly set
+					if (!supportsInPerson) {
+						supportsInPerson = nameLower.includes('group') || nameLower.includes('teaching');
+					}
+
 					return {
 						id: product.id,
 						name: product.name,
 						description: product.description || '',
-						package_type: metadata.package_type || 'discovery',
-						duration_minutes: metadata.duration_minutes || 30,
+						package_type: packageType,
+						duration_minutes: durationMinutes,
 						price,
 						sale_price: product.sale_price,
 						image_url: product.image_url,
@@ -117,8 +154,9 @@ class BookingStore {
 							max_booking_days:
 								metadata.max_booking_days || tenantConfig.consultations?.maxBookingDays || 90,
 							popular: metadata.popular || false,
-							supports_in_person: metadata.supports_in_person || false,
-							in_person_location: metadata.in_person_location
+							supports_in_person: supportsInPerson,
+							in_person_location: metadata.in_person_location ||
+								(supportsInPerson ? 'Durban, KwaZulu-Natal' : undefined)
 						}
 					};
 				});
