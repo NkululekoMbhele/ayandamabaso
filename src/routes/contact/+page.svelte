@@ -25,7 +25,8 @@
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
-					'X-API-Key': import.meta.env.VITE_API_KEY || 'pk_live_tenant_41'
+					'X-API-Key': import.meta.env.VITE_API_KEY || 'pk_live_tenant_41',
+					'X-Tenant-ID': import.meta.env.VITE_TENANT_ID || '41'
 				},
 				body: JSON.stringify({
 					name: name.trim(),
@@ -40,7 +41,9 @@
 
 			if (!response.ok) {
 				const errorData = await response.json().catch(() => ({}));
-				throw new Error(errorData.detail || `Submission failed: ${response.status}`);
+				const detail = errorData.detail;
+				const msg = typeof detail === 'string' ? detail : detail?.message || `Submission failed: ${response.status}`;
+				throw new Error(msg);
 			}
 
 			// Success
