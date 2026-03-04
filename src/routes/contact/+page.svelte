@@ -25,7 +25,7 @@
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
-					'X-API-Key': import.meta.env.VITE_API_KEY || 'pk_test_tenant_11'
+					'X-API-Key': import.meta.env.VITE_API_KEY || 'pk_live_tenant_41'
 				},
 				body: JSON.stringify({
 					name: name.trim(),

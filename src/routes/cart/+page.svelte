@@ -41,13 +41,7 @@
   }
 
   function handleCheckout() {
-    if (!authStore.isAuthenticated) {
-      // Trigger login modal
-      window.dispatchEvent(new CustomEvent('openLoginModal'));
-    } else {
-      // Proceed to checkout (would be implemented)
-      goto('/checkout');
-    }
+    goto('/checkout');
   }
 </script>
 
