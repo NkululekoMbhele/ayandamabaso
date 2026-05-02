@@ -80,10 +80,20 @@
 				// Reload page to update auth state
 				window.location.reload();
 			} else {
-				error = response.error || 'Login failed. Please check your credentials.';
+				const raw = response.error || 'Login failed. Please check your credentials.';
+				if (raw.includes('429') || raw.toLowerCase().includes('rate limit') || raw.toLowerCase().includes('too many')) {
+					error = 'Too many login attempts. Please wait a moment and try again.';
+				} else if (raw.toLowerCase().includes('invalid credentials') || raw.toLowerCase().includes('incorrect')) {
+					error = 'Incorrect email or password. Please try again.';
+				} else {
+					error = raw;
+				}
 			}
 		} catch (err: any) {
-			error = err.message || 'An unexpected error occurred. Please try again.';
+			const raw = err.message || 'An unexpected error occurred. Please try again.';
+			error = raw.includes('429') || raw.toLowerCase().includes('rate limit')
+				? 'Too many login attempts. Please wait a moment and try again.'
+				: raw;
 		} finally {
 			isLoading = false;
 		}

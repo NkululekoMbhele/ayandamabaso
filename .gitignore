@@ -36,3 +36,22 @@ dist-ssr
 # Misc
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Test artefacts and reports
+.playwright-mcp/
+playwright-report/
+test-results/
+*-screenshot.png
+*-snapshot.md
+homepage-test.png
+checkout-test.png
+ayanda-case-study-final.png
+ayanda-case-study-page.png
+ayanda-detail-fixed.png
+case-studies-current.png
+portfolio-*.png
+TESTING_INDEX.md
+TESTING_SUMMARY.md
+TEST_RESULTS_QUICK_REFERENCE.txt
+DEPLOYMENT_TEST_GUIDE.md
+POST_DEPLOYMENT_TEST_REPORT.md
