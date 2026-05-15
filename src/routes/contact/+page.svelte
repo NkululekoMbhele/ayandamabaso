@@ -212,6 +212,7 @@
 									id="name"
 									bind:value={name}
 									required
+									aria-required="true"
 									disabled={isSubmitting}
 									class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:outline-none transition-colors disabled:bg-gray-50 disabled:cursor-not-allowed"
 									placeholder="Your name"
@@ -224,6 +225,7 @@
 									id="email"
 									bind:value={email}
 									required
+									aria-required="true"
 									disabled={isSubmitting}
 									class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:outline-none transition-colors disabled:bg-gray-50 disabled:cursor-not-allowed"
 									placeholder="your@email.com"
@@ -238,6 +240,7 @@
 								id="subject"
 								bind:value={subject}
 								required
+								aria-required="true"
 								disabled={isSubmitting}
 								class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:outline-none transition-colors disabled:bg-gray-50 disabled:cursor-not-allowed"
 								placeholder="What's this about?"
@@ -250,6 +253,7 @@
 								id="message"
 								bind:value={message}
 								required
+								aria-required="true"
 								disabled={isSubmitting}
 								rows="5"
 								class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:outline-none transition-colors resize-none disabled:bg-gray-50 disabled:cursor-not-allowed"
@@ -277,7 +281,8 @@
 						</Button>
 
 						<p class="text-xs text-muted-foreground text-center mt-4">
-							By submitting this form, you agree to our privacy policy.
+							By submitting, you agree to our <a href="/privacy" class="underline hover:text-accent">Privacy Policy</a>.
+							We'll only use your details to respond to you.
 						</p>
 					</form>
 				{/if}

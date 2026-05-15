@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { browser } from "$app/environment"
-	import { X } from "lucide-svelte"
+	import { X } from "@lucide/svelte"
 
 	const STORAGE_KEY = "ayanda_cookie_ack"
 
