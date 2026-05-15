@@ -31,6 +31,7 @@ class BookingStore {
 	guestInfo = $state<GuestInfo | null>(null);
 	isLoading = $state(false);
 	error = $state<string | null>(null);
+	loadFailed = $state(false);
 
 	/**
 	 * Load consultation offerings from the backend
@@ -40,6 +41,7 @@ class BookingStore {
 	async loadConsultationOfferings(): Promise<void> {
 		this.isLoading = true;
 		this.error = null;
+		this.loadFailed = false;
 
 		try {
 			// Fetch products/offerings from backend API (CORS now configured)
@@ -170,7 +172,8 @@ class BookingStore {
 			console.log(`Loaded ${this.offerings.length} consultation offerings from API`);
 		} catch (err: any) {
 			// Fallback to hardcoded packages if API fails
-			console.warn('API unavailable, using hardcoded packages:', err.message);
+			console.error('[booking] Live offerings unavailable, using fallback packages:', err?.message || err);
+			this.loadFailed = true;
 			this.offerings = [
 				{
 					id: 1,
