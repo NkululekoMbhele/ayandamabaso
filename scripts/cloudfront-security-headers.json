@@ -1,0 +1,37 @@
+{
+	"Name": "ayandamabaso-security-headers",
+	"Comment": "Security response headers policy for ayandamabaso.co.za. Apply via: aws cloudfront create-response-headers-policy --response-headers-policy-config file://scripts/cloudfront-security-headers.json",
+	"SecurityHeadersConfig": {
+		"StrictTransportSecurity": {
+			"Override": true,
+			"IncludeSubdomains": true,
+			"Preload": true,
+			"AccessControlMaxAgeSec": 31536000
+		},
+		"ContentTypeOptions": {
+			"Override": true
+		},
+		"FrameOptions": {
+			"Override": true,
+			"FrameOption": "DENY"
+		},
+		"ReferrerPolicy": {
+			"Override": true,
+			"ReferrerPolicy": "strict-origin-when-cross-origin"
+		},
+		"ContentSecurityPolicy": {
+			"Override": true,
+			"ContentSecurityPolicy": "default-src 'self'; img-src 'self' data: https:; connect-src 'self' https://api.tredicik.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; script-src 'self'; frame-ancestors 'none';"
+		}
+	},
+	"CustomHeadersConfig": {
+		"Quantity": 1,
+		"Items": [
+			{
+				"Header": "Permissions-Policy",
+				"Value": "camera=(), microphone=(), geolocation=(), payment=()",
+				"Override": true
+			}
+		]
+	}
+}
