@@ -35,6 +35,7 @@
 	"dependencies": {
 		"@fontsource/dm-sans": "^5.2.8",
 		"@fontsource/playfair-display": "^5.2.8",
+		"@sentry/sveltekit": "^10.53.1",
 		"@tredicik/portal-sdk": "file:../tredicik/packages/portal-sdk",
 		"@tredicik/portal-sdk-svelte": "file:../tredicik/packages/portal-sdk-svelte",
 		"clsx": "^2.1.1",
