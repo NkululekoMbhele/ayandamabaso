@@ -8,6 +8,7 @@
 	import { LoginModal, RegisterModal } from '$lib/components/auth';
 	import { Button } from '$lib/components/ui/button';
 	import * as Avatar from '$lib/components/ui/avatar';
+	import CookieBanner from '$lib/components/CookieBanner.svelte';
 	import {
 		Menu,
 		X,
@@ -26,7 +27,7 @@
 		Minus,
 		Plus,
 		ShoppingBag
-	} from 'lucide-svelte';
+	} from '@lucide/svelte';
 
 	let { children } = $props();
 
@@ -526,7 +527,7 @@
 							<li>
 								<a
 									href={link.href}
-									class="text-sm text-white/70 hover:text-accent transition-colors duration-200"
+									class="block py-3 text-sm text-white/70 hover:text-accent transition-colors duration-200"
 								>
 									{link.label}
 								</a>
@@ -535,7 +536,7 @@
 						<li>
 							<a
 								href="/dashboard"
-								class="text-sm text-white/70 hover:text-accent transition-colors duration-200"
+								class="block py-3 text-sm text-white/70 hover:text-accent transition-colors duration-200"
 							>
 								My Account
 							</a>
@@ -548,22 +549,22 @@
 					<h4 class="font-semibold mb-6 text-white/90">Services</h4>
 					<ul class="space-y-3">
 						<li>
-							<a href="/services" class="text-sm text-white/70 hover:text-accent transition-colors duration-200">
+							<a href="/services" class="block py-3 text-sm text-white/70 hover:text-accent transition-colors duration-200">
 								Marketing Consulting
 							</a>
 						</li>
 						<li>
-							<a href="/speaking" class="text-sm text-white/70 hover:text-accent transition-colors duration-200">
+							<a href="/speaking" class="block py-3 text-sm text-white/70 hover:text-accent transition-colors duration-200">
 								Keynote Speaking
 							</a>
 						</li>
 						<li>
-							<a href="/services" class="text-sm text-white/70 hover:text-accent transition-colors duration-200">
+							<a href="/services" class="block py-3 text-sm text-white/70 hover:text-accent transition-colors duration-200">
 								Business Strategy
 							</a>
 						</li>
 						<li>
-							<a href="/store" class="text-sm text-white/70 hover:text-accent transition-colors duration-200">
+							<a href="/store" class="block py-3 text-sm text-white/70 hover:text-accent transition-colors duration-200">
 								Consultations
 							</a>
 						</li>
@@ -578,7 +579,7 @@
 							<Mail class="w-4 h-4 mt-1 text-accent shrink-0" />
 							<a
 								href="mailto:biz@mabasomedia.co.za"
-								class="text-sm text-white/70 hover:text-accent transition-colors"
+								class="block py-3 text-sm text-white/70 hover:text-accent transition-colors"
 							>
 								biz@mabasomedia.co.za
 							</a>
@@ -593,8 +594,23 @@
 				</div>
 			</div>
 
+			<!-- Legal links -->
+			<div class="mt-16 pt-8 border-t border-white/10">
+				<nav class="flex flex-wrap items-center justify-center gap-x-6 gap-y-1" aria-label="Legal">
+					<a href="/privacy" class="block py-3 text-sm text-white/70 hover:text-accent transition-colors">
+						Privacy Policy
+					</a>
+					<a href="/terms" class="block py-3 text-sm text-white/70 hover:text-accent transition-colors">
+						Terms of Service
+					</a>
+					<a href="mailto:ayanda@ayandamabaso.co.za" class="block py-3 text-sm text-white/70 hover:text-accent transition-colors">
+						Data Requests
+					</a>
+				</nav>
+			</div>
+
 			<!-- Copyright -->
-			<div class="mt-16 pt-8 border-t border-white/10 text-center">
+			<div class="mt-4 pt-4 border-t border-white/10 text-center">
 				<p class="text-sm text-white/60">
 					&copy; {new Date().getFullYear()} Ayanda Mabaso. All rights reserved.
 				</p>
@@ -604,6 +620,8 @@
 			</div>
 		</div>
 	</footer>
+
+	<CookieBanner />
 </div>
 
 <!-- Auth Modals -->
