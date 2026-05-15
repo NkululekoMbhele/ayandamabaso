@@ -2,6 +2,7 @@
   import { goto } from '$app/navigation';
   import { cartStore } from '$lib/stores/cart.svelte';
   import { authStore } from '$lib/stores/auth.svelte';
+  import { bookingStore } from '$lib/stores/booking.svelte';
   import * as Card from '$lib/components/ui/card';
   import { Button } from '$lib/components/ui/button';
   import { Input } from '$lib/components/ui/input';
@@ -20,9 +21,34 @@
   let email = $state(authStore.user?.email || '');
   let phone = $state(authStore.user?.phoneNumber || '');
 
-  // Sync form fields from auth store after client-side hydration
-  // (SSR renders with empty values since localStorage isn't available server-side)
+  // Pull guest info captured during the booking flow (step 3) so users
+  // don't have to retype their details on /checkout. Falls back to the
+  // extra_data attached to a cart item if the in-memory store is empty
+  // (e.g. after a hard refresh).
+  function getBookingGuestInfo() {
+    const fromStore = bookingStore.guestInfo;
+    if (fromStore && (fromStore.email || fromStore.firstName)) return fromStore;
+
+    const cartItems = cartStore.cart?.items || [];
+    for (const item of cartItems) {
+      const gi = item.extraData?.guest_info;
+      if (gi && (gi.email || gi.firstName)) return gi;
+    }
+    return null;
+  }
+
+  // Sync form fields after client-side hydration (SSR has no localStorage).
+  // Priority: existing input > booking guest info > authenticated user.
   $effect(() => {
+    const bookingGuest = getBookingGuestInfo();
+
+    if (bookingGuest) {
+      if (!firstName) firstName = bookingGuest.firstName || '';
+      if (!lastName) lastName = bookingGuest.lastName || '';
+      if (!email) email = bookingGuest.email || '';
+      if (!phone) phone = bookingGuest.phone || '';
+    }
+
     if (authStore.user) {
       if (!firstName) firstName = (authStore.user as any).firstName || (authStore.user as any).first_name || '';
       if (!lastName) lastName = (authStore.user as any).lastName || (authStore.user as any).last_name || '';
