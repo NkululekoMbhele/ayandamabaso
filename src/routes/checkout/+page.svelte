@@ -8,7 +8,7 @@
   import { Input } from '$lib/components/ui/input';
   import { Label } from '$lib/components/ui/label';
   import { Separator } from '$lib/components/ui/separator';
-  import { ShoppingCart, CreditCard, Lock, ArrowLeft, Loader2, CheckCircle } from 'lucide-svelte';
+  import { ShoppingCart, CreditCard, Lock, ArrowLeft, Loader2, CheckCircle, AlertTriangle, Mail, RefreshCw } from '@lucide/svelte';
 
   // Form state
   let isLoading = $state(false);
@@ -143,7 +143,14 @@
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.detail || errorData.message || `Request failed with status code ${response.status}`);
+      const rawDetail = errorData.detail || errorData.message || '';
+      // Treat opaque 5xx messages as a generic server failure so the UI
+      // can show a friendly card rather than echoing "Internal server error".
+      const isServerError = response.status >= 500;
+      const friendly = isServerError && (!rawDetail || /internal server error/i.test(rawDetail))
+        ? `Our booking service is having a moment (HTTP ${response.status}). Please try again shortly.`
+        : (rawDetail || `Request failed (HTTP ${response.status})`);
+      throw new Error(friendly);
     }
 
     return response.json();
@@ -232,12 +239,19 @@
       }, 100);
 
     } catch (err: any) {
-      console.error('Checkout error:', err);
-      error = err.message || 'An error occurred during checkout';
+      // Surface a friendly, branded error instead of a raw backend message.
+      // Log full details with [checkout] prefix so Sentry (F4) can pick it up later.
+      console.error('[checkout] Order submission failed:', err);
+      error = err?.message || 'An error occurred during checkout';
       step = 'details';
     } finally {
       isLoading = false;
     }
+  }
+
+  function retryCheckout() {
+    error = '';
+    handleCheckout();
   }
 
   // Redirect if cart is empty
@@ -301,9 +315,37 @@
         <!-- Checkout Form -->
         <div class="lg:col-span-2 space-y-6">
           {#if error}
-            <div class="p-4 bg-destructive/10 text-destructive rounded-lg">
-              {error}
-            </div>
+            <Card.Root class="border-destructive/40 bg-destructive/5">
+              <Card.Header>
+                <Card.Title class="flex items-center gap-2 text-destructive">
+                  <AlertTriangle class="h-5 w-5" />
+                  We couldn't complete your booking
+                </Card.Title>
+                <Card.Description class="text-destructive/90">
+                  Something went wrong on our end. Please try again in a few minutes,
+                  or email Ayanda directly and we'll sort it out.
+                </Card.Description>
+              </Card.Header>
+              <Card.Content>
+                <p class="text-xs text-muted-foreground mb-4 break-words">
+                  Reference: <span class="font-mono">{error}</span>
+                </p>
+                <div class="flex flex-col sm:flex-row gap-3">
+                  <Button onclick={retryCheckout} disabled={isLoading} class="flex-1">
+                    <RefreshCw class="h-4 w-4 mr-2" />
+                    Retry
+                  </Button>
+                  <Button
+                    variant="outline"
+                    class="flex-1"
+                    href="mailto:ayanda@ayandamabaso.co.za?subject=Booking%20issue%20on%20checkout&body=Hi%20Ayanda%2C%0A%0AI%20ran%20into%20an%20issue%20completing%20my%20booking%20on%20your%20site.%0A%0AError%20reference%3A%20{encodeURIComponent(error)}%0A%0AThanks%2C"
+                  >
+                    <Mail class="h-4 w-4 mr-2" />
+                    Email Ayanda
+                  </Button>
+                </div>
+              </Card.Content>
+            </Card.Root>
           {/if}
 
           <!-- Customer Details -->
