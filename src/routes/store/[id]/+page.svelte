@@ -8,7 +8,7 @@
   import { Button } from '$lib/components/ui/button';
   import { Badge } from '$lib/components/ui/badge';
   import { Separator } from '$lib/components/ui/separator';
-  import { ShoppingCart, BookOpen, Loader2, ArrowLeft, Star, CheckCircle, XCircle } from 'lucide-svelte';
+  import { ShoppingCart, BookOpen, Loader2, ArrowLeft, Star, CheckCircle, XCircle } from '@lucide/svelte';
   import { goto } from '$app/navigation';
   import DOMPurify from 'dompurify';
 

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
-	import { ArrowRight, Mic, Users, Calendar, MapPin, Clock, Check } from 'lucide-svelte';
+	import { ArrowRight, Mic, Users, Calendar, MapPin, Clock, Check } from '@lucide/svelte';
 
 	const topics = [
 		'Digital Marketing & Content Strategy',

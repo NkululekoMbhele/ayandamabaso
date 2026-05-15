@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
-	import { ArrowRight, TrendingUp, Mic, Users, Check, Target, BarChart, Lightbulb } from 'lucide-svelte';
+	import { ArrowRight, TrendingUp, Mic, Users, Check, Target, BarChart, Lightbulb } from '@lucide/svelte';
 
 	const services = [
 		{

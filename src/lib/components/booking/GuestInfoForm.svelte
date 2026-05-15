@@ -4,7 +4,7 @@
 	import { Label } from '$lib/components/ui/label';
 	import { Textarea } from '$lib/components/ui/textarea';
 	import * as RadioGroup from '$lib/components/ui/radio-group';
-	import { User, Mail, Phone, MessageSquare, Clock, MapPin, Info } from 'lucide-svelte';
+	import { User, Mail, Phone, MessageSquare, Clock, MapPin, Info } from '@lucide/svelte';
 
 	interface Props {
 		guestInfo: GuestInfo;

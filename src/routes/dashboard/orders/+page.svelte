@@ -24,7 +24,7 @@
 		ClipboardList,
 		AlertCircle,
 		CheckCircle2
-	} from 'lucide-svelte';
+	} from '@lucide/svelte';
 
 	interface OrderItem {
 		id: number;

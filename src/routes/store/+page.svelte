@@ -6,7 +6,7 @@
   import { ProductCard } from '$lib/components/store';
   import { EmptyState } from '@tredicik/portal-sdk-svelte/components';
   import { Button } from '$lib/components/ui/button';
-  import { BookOpen, Package, Grid3x3, Loader2, CheckCircle, XCircle } from 'lucide-svelte';
+  import { BookOpen, Package, Grid3x3, Loader2, CheckCircle, XCircle } from '@lucide/svelte';
 
   let products = $state<Product[]>([]);
   let allProducts = $state<Product[]>([]);

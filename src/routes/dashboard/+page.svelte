@@ -7,7 +7,7 @@
   import * as Card from '$lib/components/ui/card';
   import { Button } from '$lib/components/ui/button';
   import { Badge } from '$lib/components/ui/badge';
-  import { User, Package, Calendar, ShoppingBag, Loader2, Download } from 'lucide-svelte';
+  import { User, Package, Calendar, ShoppingBag, Loader2, Download } from '@lucide/svelte';
 
   let orders = $state<Order[]>([]);
   let isLoading = $state(true);

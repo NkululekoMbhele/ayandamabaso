@@ -4,7 +4,7 @@
   import { goto } from '$app/navigation';
   import * as Card from '$lib/components/ui/card';
   import { Button } from '$lib/components/ui/button';
-  import { CheckCircle, Package, Mail, ArrowRight, Download } from 'lucide-svelte';
+  import { CheckCircle, Package, Mail, ArrowRight, Download } from '@lucide/svelte';
   import QualifyingQuestionsForm from '$lib/components/checkout/QualifyingQuestionsForm.svelte';
   import { cartStore } from '$lib/stores/cart.svelte';
 

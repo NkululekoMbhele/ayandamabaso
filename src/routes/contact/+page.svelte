@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
-	import { Mail, MapPin, Instagram, Send, CheckCircle, AlertCircle } from 'lucide-svelte';
+	import { Mail, MapPin, Instagram, Send, CheckCircle, AlertCircle } from '@lucide/svelte';
 	import { tenantConfig } from '$lib/config';
 
 	let name = $state('');

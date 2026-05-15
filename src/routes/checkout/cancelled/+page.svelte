@@ -3,7 +3,7 @@
   import { goto } from '$app/navigation';
   import * as Card from '$lib/components/ui/card';
   import { Button } from '$lib/components/ui/button';
-  import { XCircle, ArrowLeft, RefreshCw, HelpCircle } from 'lucide-svelte';
+  import { XCircle, ArrowLeft, RefreshCw, HelpCircle } from '@lucide/svelte';
 
   // Get order number from URL
   const orderNumber = $derived($page.url.searchParams.get('order') || '');

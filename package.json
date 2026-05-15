@@ -33,11 +33,12 @@
 		"vite": "^7.1.7"
 	},
 	"dependencies": {
+		"@fontsource/dm-sans": "^5.2.8",
+		"@fontsource/playfair-display": "^5.2.8",
 		"@tredicik/portal-sdk": "file:../tredicik/packages/portal-sdk",
 		"@tredicik/portal-sdk-svelte": "file:../tredicik/packages/portal-sdk-svelte",
 		"clsx": "^2.1.1",
 		"dompurify": "^3.3.1",
-		"lucide-svelte": "^0.544.0",
 		"mode-watcher": "^1.1.0",
 		"shadcn-svelte": "^1.0.8",
 		"tailwind-merge": "^3.3.1"

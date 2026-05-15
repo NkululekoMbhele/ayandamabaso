@@ -6,7 +6,7 @@
   import { Button } from '$lib/components/ui/button';
   import { Input } from '$lib/components/ui/input';
   import { Separator } from '$lib/components/ui/separator';
-  import { ShoppingCart, Trash2, Plus, Minus, ArrowLeft, Loader2 } from 'lucide-svelte';
+  import { ShoppingCart, Trash2, Plus, Minus, ArrowLeft, Loader2 } from '@lucide/svelte';
 
   let promoCode = $state('');
   let isApplyingPromo = $state(false);

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { AuthStore } from '@tredicik/portal-sdk-svelte/stores';
 	import { portal } from '$lib/portal';
-	import { Mail, Lock, Loader2, X } from 'lucide-svelte';
+	import { Mail, Lock, Loader2, X } from '@lucide/svelte';
 
 	interface Props {
 		open: boolean;

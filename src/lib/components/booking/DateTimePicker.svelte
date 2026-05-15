@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Calendar as CalendarPrimitive } from '$lib/components/ui/calendar';
 	import * as Popover from '$lib/components/ui/popover';
-	import { Calendar as CalendarIcon } from 'lucide-svelte';
+	import { Calendar as CalendarIcon } from '@lucide/svelte';
 	import { formatDate } from '$lib/utils/date';
 	import { CalendarDate, type DateValue } from '@internationalized/date';
 

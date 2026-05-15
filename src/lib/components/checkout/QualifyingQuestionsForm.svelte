@@ -3,7 +3,7 @@
 	import * as Card from '$lib/components/ui/card';
 	import { Label } from '$lib/components/ui/label';
 	import { Textarea } from '$lib/components/ui/textarea';
-	import { AlertCircle, Loader2, CheckCircle } from 'lucide-svelte';
+	import { AlertCircle, Loader2, CheckCircle } from '@lucide/svelte';
 
 	interface Props {
 		orderNumber: string;

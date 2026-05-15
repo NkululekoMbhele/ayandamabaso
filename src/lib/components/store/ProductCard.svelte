@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { BookOpen, ShoppingCart, Loader2, Check } from 'lucide-svelte';
+	import { BookOpen, ShoppingCart, Loader2, Check } from '@lucide/svelte';
 
 	interface Product {
 		id: number;
