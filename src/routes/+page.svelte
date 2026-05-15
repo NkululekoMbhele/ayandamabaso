@@ -198,6 +198,12 @@
 						<img
 							src="/ayanda.webp"
 							alt="Ayanda Mabaso - Marketing Expert & Speaker"
+							width="256"
+							height="256"
+							loading="eager"
+							fetchpriority="high"
+							decoding="async"
+							sizes="(min-width: 640px) 256px, 192px"
 							class="w-full h-full object-cover object-top rounded-full border-4 border-white shadow-elegant"
 						/>
 						<!-- Decorative ring -->
@@ -211,6 +217,12 @@
 						<img
 							src="/ayanda.webp"
 							alt="Ayanda Mabaso - Marketing Expert & Speaker"
+							width="320"
+							height="384"
+							loading="eager"
+							fetchpriority="high"
+							decoding="async"
+							sizes="320px"
 							class="w-full h-full object-cover object-top"
 						/>
 					</div>

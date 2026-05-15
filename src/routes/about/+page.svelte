@@ -48,6 +48,12 @@
 					<img
 						src="/ayanda.webp"
 						alt="Ayanda Mabaso"
+						width="448"
+						height="448"
+						loading="eager"
+						fetchpriority="high"
+						decoding="async"
+						sizes="(min-width: 1024px) 448px, 90vw"
 						class="w-full h-full object-cover object-top"
 					/>
 				</div>
