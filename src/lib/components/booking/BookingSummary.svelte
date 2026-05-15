@@ -4,7 +4,7 @@
 	import { Button } from '$lib/components/ui/button';
 	import { Badge } from '$lib/components/ui/badge';
 	import { Separator } from '$lib/components/ui/separator';
-	import { Calendar, User, Mail, Phone, Check, ShoppingCart } from 'lucide-svelte';
+	import { Calendar, User, Mail, Phone, Check, ShoppingCart } from '@lucide/svelte';
 	import { formatDate } from '$lib/utils/date';
 
 	interface Props {
@@ -14,9 +14,18 @@
 		onAddToCart: () => void;
 		isComplete: boolean;
 		isLoading?: boolean;
+		missingReason?: string;
 	}
 
-	let { offering, date, guestInfo, onAddToCart, isComplete, isLoading = false }: Props = $props();
+	let {
+		offering,
+		date,
+		guestInfo,
+		onAddToCart,
+		isComplete,
+		isLoading = false,
+		missingReason = ''
+	}: Props = $props();
 
 	function formatPrice(price: number): string {
 		if (price === 0) return 'Free';
@@ -159,7 +168,7 @@
 
 			{#if !isComplete}
 				<p class="text-xs text-center text-muted-foreground">
-					Complete all steps to proceed
+					{missingReason || 'Complete all steps to proceed'}
 				</p>
 			{:else}
 				<p class="text-xs text-center text-muted-foreground">

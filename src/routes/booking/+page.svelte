@@ -5,7 +5,7 @@
 	import { bookingStore } from '$lib/stores/booking.svelte';
 	import { authStore } from '$lib/stores/auth.svelte';
 	import { Button } from '$lib/components/ui/button';
-	import { ArrowLeft, ArrowRight, Check } from 'lucide-svelte';
+	import { ArrowLeft, ArrowRight, Check, AlertTriangle } from '@lucide/svelte';
 	import type { GuestInfo } from '$lib/types/booking';
 
 	import PackageSelector from '$lib/components/booking/PackageSelector.svelte';
@@ -131,6 +131,14 @@
 	);
 
 	const stepTitles = ['Choose Package', 'Select Date', 'Contact Information'];
+
+	// Helper text explaining why the Add-to-Cart button is disabled
+	const missingReason = $derived.by(() => {
+		if (!bookingStore.selectedOffering) return 'Select a package in step 1 to continue'
+		if (!bookingStore.selectedDate) return 'Choose a preferred date in step 2'
+		if (!canProceedStep3) return 'Fill in your contact information to complete your booking'
+		return ''
+	})
 </script>
 
 <svelte:head>
@@ -215,6 +223,22 @@
 	<!-- Main Content -->
 	<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
 		<div class="max-w-7xl mx-auto">
+			{#if bookingStore.loadFailed}
+				<div
+					class="mb-8 flex items-start gap-3 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900"
+					role="status"
+				>
+					<AlertTriangle class="h-5 w-5 shrink-0 text-amber-600 mt-0.5" />
+					<div class="space-y-1">
+						<p class="font-medium">Live availability unavailable</p>
+						<p class="text-amber-800">
+							We're showing standard packages while we reconnect. Please
+							<a href="/contact" class="underline font-medium hover:text-amber-950">contact us</a>
+							to confirm pricing and availability before payment.
+						</p>
+					</div>
+				</div>
+			{/if}
 			<div class="grid lg:grid-cols-3 gap-8">
 				<!-- Steps Content (Left 2/3) -->
 				<div class="lg:col-span-2 space-y-8">
@@ -294,6 +318,7 @@
 						onAddToCart={handleAddToCart}
 						isComplete={bookingStore.isComplete && canProceedStep3}
 						isLoading={isAddingToCart}
+						missingReason={missingReason}
 					/>
 				</div>
 			</div>
