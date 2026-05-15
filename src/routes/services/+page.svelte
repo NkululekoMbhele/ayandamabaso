@@ -55,8 +55,31 @@
 </script>
 
 <svelte:head>
-	<title>Services - Ayanda Mabaso</title>
-	<meta name="description" content="Marketing consulting, business strategy, content strategy, and team training services by Ayanda Mabaso." />
+	<title>Marketing Services - Ayanda Mabaso</title>
+	<meta name="description" content="Marketing consulting, business strategy, content strategy, and team training services by Ayanda Mabaso. Proven results for brands ready to scale." />
+	<link rel="canonical" href="https://www.ayandamabaso.co.za/services" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://www.ayandamabaso.co.za/services" />
+	<meta property="og:title" content="Marketing Services - Ayanda Mabaso" />
+	<meta property="og:description" content="Marketing consulting, business strategy, content strategy, and team training services." />
+	<meta property="og:image" content="https://www.ayandamabaso.co.za/ayanda.webp" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="Marketing Services - Ayanda Mabaso" />
+	<meta name="twitter:description" content="Marketing consulting, business strategy, content strategy, and team training services." />
+	<meta name="twitter:image" content="https://www.ayandamabaso.co.za/ayanda.webp" />
+	{@html `<script type="application/ld+json">${JSON.stringify({
+		"@context": "https://schema.org",
+		"@type": "Service",
+		"serviceType": "Marketing Consulting",
+		"provider": {
+			"@type": "Person",
+			"name": "Ayanda Mabaso",
+			"url": "https://www.ayandamabaso.co.za"
+		},
+		"areaServed": "ZA",
+		"url": "https://www.ayandamabaso.co.za/services",
+		"description": "Marketing consulting, business strategy, content strategy, and team training services."
+	})}</` + `script>`}
 </svelte:head>
 
 <!-- Hero Section -->

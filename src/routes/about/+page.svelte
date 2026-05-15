@@ -4,8 +4,38 @@
 </script>
 
 <svelte:head>
-	<title>About - Ayanda Mabaso</title>
-	<meta name="description" content="Learn about Ayanda Mabaso - Digital creator, marketing expert & speaker helping businesses generate millions in sales." />
+	<title>About Ayanda Mabaso - Marketing Expert & Digital Creator</title>
+	<meta name="description" content="Learn about Ayanda Mabaso - digital creator, marketing expert and keynote speaker helping businesses generate millions in sales through strategy and content." />
+	<link rel="canonical" href="https://www.ayandamabaso.co.za/about" />
+	<meta property="og:type" content="profile" />
+	<meta property="og:url" content="https://www.ayandamabaso.co.za/about" />
+	<meta property="og:title" content="About Ayanda Mabaso - Marketing Expert & Digital Creator" />
+	<meta property="og:description" content="Digital creator, marketing expert and keynote speaker helping businesses generate millions in sales." />
+	<meta property="og:image" content="https://www.ayandamabaso.co.za/ayanda.webp" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="About Ayanda Mabaso - Marketing Expert & Digital Creator" />
+	<meta name="twitter:description" content="Digital creator, marketing expert and keynote speaker helping businesses generate millions in sales." />
+	<meta name="twitter:image" content="https://www.ayandamabaso.co.za/ayanda.webp" />
+	{@html `<script type="application/ld+json">${JSON.stringify({
+		"@context": "https://schema.org",
+		"@type": "Person",
+		"name": "Ayanda Mabaso",
+		"jobTitle": "Marketing Expert, Digital Creator & Keynote Speaker",
+		"url": "https://www.ayandamabaso.co.za/about",
+		"image": "https://www.ayandamabaso.co.za/ayanda.webp",
+		"description": "Digital creator, marketing expert and keynote speaker helping businesses generate millions in sales.",
+		"sameAs": [
+			"https://www.instagram.com/ayandamabaso_official/",
+			"https://www.tiktok.com/@ayanda.mabaso.marketing"
+		]
+	})}</` + `script>`}
+	{@html `<script type="application/ld+json">${JSON.stringify({
+		"@context": "https://schema.org",
+		"@type": "Organization",
+		"name": "Ayanda Mabaso",
+		"url": "https://www.ayandamabaso.co.za",
+		"logo": "https://www.ayandamabaso.co.za/favicon-512.png"
+	})}</` + `script>`}
 </svelte:head>
 
 <!-- Hero Section -->

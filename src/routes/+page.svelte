@@ -15,7 +15,7 @@
 		Clock,
 		Video,
 		Zap
-	} from 'lucide-svelte';
+	} from '@lucide/svelte';
 
 	const packages = [
 		{
@@ -95,11 +95,44 @@
 </script>
 
 <svelte:head>
-	<title>{tenantConfig.name} - Marketing Expert & Speaker</title>
+	<title>Ayanda Mabaso - Marketing Expert, Digital Creator & Keynote Speaker</title>
 	<meta
 		name="description"
-		content="Digital creator, marketing expert & speaker. Helping businesses generate millions in sales through strategic marketing and content."
+		content="Digital creator, marketing expert and keynote speaker. Helping businesses generate millions in sales through strategic marketing, content, and consulting."
 	/>
+	<link rel="canonical" href="https://www.ayandamabaso.co.za/" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://www.ayandamabaso.co.za/" />
+	<meta property="og:title" content="Ayanda Mabaso - Marketing Expert & Keynote Speaker" />
+	<meta property="og:description" content="Digital creator, marketing expert and keynote speaker. Helping businesses generate millions in sales." />
+	<meta property="og:image" content="https://www.ayandamabaso.co.za/ayanda.webp" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="Ayanda Mabaso - Marketing Expert & Keynote Speaker" />
+	<meta name="twitter:description" content="Digital creator, marketing expert and keynote speaker. Helping businesses generate millions in sales." />
+	<meta name="twitter:image" content="https://www.ayandamabaso.co.za/ayanda.webp" />
+	{@html `<script type="application/ld+json">${JSON.stringify({
+		"@context": "https://schema.org",
+		"@type": "Organization",
+		"name": "Ayanda Mabaso",
+		"url": "https://www.ayandamabaso.co.za",
+		"logo": "https://www.ayandamabaso.co.za/favicon-512.png",
+		"sameAs": [
+			"https://www.instagram.com/ayandamabaso_official/",
+			"https://www.tiktok.com/@ayanda.mabaso.marketing"
+		]
+	})}</` + `script>`}
+	{@html `<script type="application/ld+json">${JSON.stringify({
+		"@context": "https://schema.org",
+		"@type": "Person",
+		"name": "Ayanda Mabaso",
+		"jobTitle": "Marketing Expert, Digital Creator & Keynote Speaker",
+		"url": "https://www.ayandamabaso.co.za",
+		"image": "https://www.ayandamabaso.co.za/ayanda.webp",
+		"sameAs": [
+			"https://www.instagram.com/ayandamabaso_official/",
+			"https://www.tiktok.com/@ayanda.mabaso.marketing"
+		]
+	})}</` + `script>`}
 </svelte:head>
 
 <!-- Hero Section -->

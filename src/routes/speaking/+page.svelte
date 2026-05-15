@@ -34,8 +34,18 @@
 </script>
 
 <svelte:head>
-	<title>Speaking - Ayanda Mabaso</title>
-	<meta name="description" content="Book Ayanda Mabaso for keynote speaking, workshops, and corporate training on marketing, business growth, and entrepreneurship." />
+	<title>Keynote Speaking - Ayanda Mabaso</title>
+	<meta name="description" content="Book Ayanda Mabaso for keynote speaking, workshops, and corporate training on marketing, business growth, content creation, and entrepreneurship." />
+	<link rel="canonical" href="https://www.ayandamabaso.co.za/speaking" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://www.ayandamabaso.co.za/speaking" />
+	<meta property="og:title" content="Keynote Speaking - Ayanda Mabaso" />
+	<meta property="og:description" content="Book Ayanda Mabaso for keynote speaking, workshops, and corporate training." />
+	<meta property="og:image" content="https://www.ayandamabaso.co.za/ayanda.webp" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="Keynote Speaking - Ayanda Mabaso" />
+	<meta name="twitter:description" content="Book Ayanda Mabaso for keynote speaking, workshops, and corporate training." />
+	<meta name="twitter:image" content="https://www.ayandamabaso.co.za/ayanda.webp" />
 </svelte:head>
 
 <!-- Hero Section -->

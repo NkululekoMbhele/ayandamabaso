@@ -74,8 +74,18 @@
 </script>
 
 <svelte:head>
-	<title>Contact - Ayanda Mabaso</title>
-	<meta name="description" content="Get in touch with Ayanda Mabaso for marketing consulting, speaking engagements, or business inquiries." />
+	<title>Contact Ayanda Mabaso - Marketing Consulting & Speaking</title>
+	<meta name="description" content="Get in touch with Ayanda Mabaso for marketing consulting, keynote speaking engagements, or business inquiries." />
+	<link rel="canonical" href="https://www.ayandamabaso.co.za/contact" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://www.ayandamabaso.co.za/contact" />
+	<meta property="og:title" content="Contact Ayanda Mabaso" />
+	<meta property="og:description" content="Get in touch for marketing consulting, keynote speaking engagements, or business inquiries." />
+	<meta property="og:image" content="https://www.ayandamabaso.co.za/ayanda.webp" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="Contact Ayanda Mabaso" />
+	<meta name="twitter:description" content="Get in touch for marketing consulting, keynote speaking engagements, or business inquiries." />
+	<meta name="twitter:image" content="https://www.ayandamabaso.co.za/ayanda.webp" />
 </svelte:head>
 
 <!-- Hero Section -->
