@@ -1,6 +1,6 @@
 {
 	"Name": "ayandamabaso-security-headers",
-	"Comment": "Security response headers policy for ayandamabaso.co.za. Apply via: aws cloudfront create-response-headers-policy --response-headers-policy-config file://scripts/cloudfront-security-headers.json",
+	"Comment": "Security response headers for ayandamabaso.co.za",
 	"SecurityHeadersConfig": {
 		"StrictTransportSecurity": {
 			"Override": true,
@@ -21,7 +21,7 @@
 		},
 		"ContentSecurityPolicy": {
 			"Override": true,
-			"ContentSecurityPolicy": "default-src 'self'; img-src 'self' data: https:; connect-src 'self' https://api.tredicik.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; script-src 'self'; frame-ancestors 'none';"
+			"ContentSecurityPolicy": "default-src 'self'; img-src 'self' data: https:; connect-src 'self' https://api.tredicik.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; script-src 'self' 'unsafe-inline'; frame-ancestors 'none';"
 		}
 	},
 	"CustomHeadersConfig": {
